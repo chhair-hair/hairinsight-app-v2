@@ -15,93 +15,119 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] flex items-center justify-center p-4">
-      <div className="max-w-4xl w-full text-center">
-        {/* Logo/Icon */}
-        <div
-          className="mb-8 animate-fade-in"
-          style={{ animationDelay: '0ms' }}
-        >
+    <div className="min-h-screen bg-[#0D0D0D] flex flex-col">
+      {/* Conteúdo Principal - Scrollável */}
+      <div className="flex-1 flex items-center justify-center p-4 pb-32 md:pb-4">
+        <div className="max-w-4xl w-full text-center">
+          {/* Logo/Icon */}
           <div
-            className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-6"
-            style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            }}
+            className="mb-6 md:mb-8 animate-fade-in"
+            style={{ animationDelay: '0ms' }}
           >
-            <Sparkles className="w-10 h-10 text-white" />
+            <div
+              className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full mb-4 md:mb-6"
+              style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              }}
+            >
+              <Sparkles className="w-8 h-8 md:w-10 md:h-10 text-white" />
+            </div>
+          </div>
+
+          {/* Título Principal */}
+          <h1
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 animate-fade-in"
+            style={{ animationDelay: '100ms' }}
+          >
+            HairInsight
+          </h1>
+
+          {/* Subtítulo - Mais curto no mobile */}
+          <p
+            className="text-lg sm:text-xl md:text-2xl text-white/70 mb-3 md:mb-4 animate-fade-in px-4"
+            style={{ animationDelay: '200ms' }}
+          >
+            Análise Capilar com IA
+          </p>
+
+          <p
+            className="text-sm sm:text-base md:text-lg text-white/50 mb-8 md:mb-12 max-w-2xl mx-auto animate-fade-in px-4"
+            style={{ animationDelay: '300ms' }}
+          >
+            Rotina personalizada em minutos
+          </p>
+
+          {/* Botão de Acesso Direto - Desktop apenas */}
+          <div className="hidden md:flex flex-col sm:flex-row gap-4 justify-center items-center mb-8 animate-fade-in" style={{ animationDelay: '400ms' }}>
+            <button
+              onClick={handleStartQuiz}
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-xl text-lg font-semibold text-white transition-all duration-300 shadow-2xl hover:scale-105 active:scale-95"
+              style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              }}
+            >
+              <span>Começar Análise</span>
+              <ArrowRight className="w-5 h-5" />
+            </button>
+
+            <button
+              onClick={handleDirectAccess}
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-xl text-lg font-semibold text-white/90 border-2 border-white/20 transition-all duration-300 hover:bg-white/10 hover:scale-105 active:scale-95 backdrop-blur-sm"
+            >
+              <Zap className="w-5 h-5" />
+              <span>Acesso Direto (Preview)</span>
+            </button>
+          </div>
+
+          {/* Nota de Preview - Desktop apenas */}
+          <p className="hidden md:block text-sm text-white/40 mb-12 animate-fade-in" style={{ animationDelay: '450ms' }}>
+            💡 Use "Acesso Direto" para testar o app sem passar pelo quiz
+          </p>
+
+          {/* Features - Compactas no mobile */}
+          <div
+            className="mt-8 md:mt-16 grid grid-cols-3 gap-3 md:gap-6 max-w-3xl mx-auto animate-fade-in px-2"
+            style={{ animationDelay: '500ms' }}
+          >
+            {[
+              { title: 'Rápido', desc: '6 perguntas', icon: '⚡' },
+              { title: 'IA', desc: 'Inteligente', icon: '🧠' },
+              { title: 'Personalizado', desc: 'Sob medida', icon: '✨' },
+            ].map((feature, index) => (
+              <div
+                key={index}
+                className="p-3 md:p-6 rounded-lg md:rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300"
+              >
+                <div className="text-2xl md:text-3xl mb-2">{feature.icon}</div>
+                <h3 className="font-semibold text-xs md:text-lg mb-1 md:mb-2">{feature.title}</h3>
+                <p className="text-white/60 text-[10px] md:text-sm">{feature.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
+      </div>
 
-        {/* Título Principal */}
-        <h1
-          className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 animate-fade-in"
-          style={{ animationDelay: '100ms' }}
+      {/* Botão CTA Fixo Mobile - Apenas mobile */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-[#0D0D0D] via-[#0D0D0D] to-transparent backdrop-blur-sm z-50">
+        <button
+          onClick={handleStartQuiz}
+          className="w-full flex items-center justify-center gap-3 px-8 py-5 rounded-2xl text-xl font-bold text-white transition-all duration-300 shadow-2xl active:scale-95"
+          style={{
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          }}
         >
-          HairInsight
-        </h1>
+          <span>Começar Análise</span>
+          <ArrowRight className="w-6 h-6" />
+        </button>
 
-        {/* Subtítulo */}
-        <p
-          className="text-xl sm:text-2xl text-white/70 mb-4 animate-fade-in"
-          style={{ animationDelay: '200ms' }}
+        {/* Botão secundário compacto */}
+        <button
+          onClick={handleDirectAccess}
+          className="w-full mt-2 flex items-center justify-center gap-2 px-4 py-2 text-sm text-white/60 transition-all duration-300 active:scale-95"
         >
-          Análise Capilar Inteligente com IA
-        </p>
-
-        <p
-          className="text-lg text-white/50 mb-12 max-w-2xl mx-auto animate-fade-in"
-          style={{ animationDelay: '300ms' }}
-        >
-          Descubra o segredo para um cabelo saudável em minutos. Análise personalizada com inteligência artificial.
-        </p>
-
-        {/* Botões CTA */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8 animate-fade-in" style={{ animationDelay: '400ms' }}>
-          <button
-            onClick={handleStartQuiz}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl text-lg font-semibold text-white transition-all duration-300 shadow-2xl hover:scale-105 active:scale-95"
-            style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            }}
-          >
-            <span>Começar Análise</span>
-            <ArrowRight className="w-5 h-5" />
-          </button>
-
-          {/* Botão de Acesso Direto para Testes */}
-          <button
-            onClick={handleDirectAccess}
-            className="inline-flex items-center gap-3 px-8 py-4 rounded-xl text-lg font-semibold text-white/90 border-2 border-white/20 transition-all duration-300 hover:bg-white/10 hover:scale-105 active:scale-95 backdrop-blur-sm"
-          >
-            <Zap className="w-5 h-5" />
-            <span>Acesso Direto (Preview)</span>
-          </button>
-        </div>
-
-        {/* Nota de Preview */}
-        <p className="text-sm text-white/40 mb-12 animate-fade-in" style={{ animationDelay: '450ms' }}>
-          💡 Use "Acesso Direto" para testar o app sem passar pelo quiz
-        </p>
-
-        {/* Features */}
-        <div
-          className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto animate-fade-in"
-          style={{ animationDelay: '500ms' }}
-        >
-          {[
-            { title: 'Análise Rápida', desc: 'Apenas 6 perguntas' },
-            { title: 'IA Avançada', desc: 'Tecnologia de ponta' },
-            { title: 'Personalizado', desc: 'Rotina sob medida' },
-          ].map((feature, index) => (
-            <div
-              key={index}
-              className="p-6 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 hover:scale-105 transition-all duration-300"
-            >
-              <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
-              <p className="text-white/60 text-sm">{feature.desc}</p>
-            </div>
-          ))}
-        </div>
+          <Zap className="w-4 h-4" />
+          <span>Acesso Direto (Preview)</span>
+        </button>
       </div>
 
       <style jsx>{`
