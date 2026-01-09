@@ -8,8 +8,14 @@ import HorizontalFeed from '@/components/HorizontalFeed';
 import { useQuiz } from '@/lib/quiz-context';
 
 export default function PreResultadoFeminino() {
-  const { getThemeColors, updateQuizData, isAdmin } = useQuiz();
-  const colors = getThemeColors();
+  const { updateQuizData, isAdmin } = useQuiz();
+
+  // FORÇAR cores rosas femininas (não depender do getThemeColors)
+  const colors = {
+    primary: '#FF6F91',
+    primaryLight: '#FF6F91',
+    primaryDark: '#FF4D73',
+  };
 
   const [analysisProgress, setAnalysisProgress] = React.useState(0);
   const [currentStep, setCurrentStep] = React.useState(0);
