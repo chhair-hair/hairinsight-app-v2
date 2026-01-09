@@ -58,7 +58,7 @@ Produtos Recomendados:
 
     // Simula análise IA por 3 segundos
     const timer = setTimeout(() => {
-      router.push('/pre-resultado');
+      router.push('/pre-resultado-feminino');
     }, 3000);
 
     return () => clearTimeout(timer);
