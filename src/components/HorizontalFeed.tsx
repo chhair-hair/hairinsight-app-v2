@@ -50,8 +50,17 @@ const cards: CardItem[] = [
 
 export default function HorizontalFeed() {
   const [isPaused, setIsPaused] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   const { getThemeColors } = useQuiz();
   const colors = getThemeColors();
+
+  // Aguardar um momento para o DOM estar pronto antes de iniciar animação
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsReady(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Duplicar cards 3x para criar loop infinito verdadeiro
   const infiniteCards = [...cards, ...cards, ...cards];
@@ -59,7 +68,7 @@ export default function HorizontalFeed() {
   return (
     <div className="relative w-full overflow-hidden py-8">
       <div
-        className={`flex gap-6 ${isPaused ? '' : 'animate-scroll-horizontal'}`}
+        className={`flex gap-6 ${isReady && !isPaused ? 'animate-scroll-horizontal' : ''}`}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
         onTouchStart={() => setIsPaused(true)}
@@ -153,21 +162,6 @@ export default function HorizontalFeed() {
       {/* Gradientes nas bordas para efeito de fade */}
       <div className="absolute top-0 left-0 w-20 h-full bg-gradient-to-r from-[#0D0D0D] to-transparent pointer-events-none z-10" />
       <div className="absolute top-0 right-0 w-20 h-full bg-gradient-to-l from-[#0D0D0D] to-transparent pointer-events-none z-10" />
-
-      <style jsx>{`
-        @keyframes scroll-horizontal {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-33.333%);
-          }
-        }
-
-        .animate-scroll-horizontal {
-          animation: scroll-horizontal 25s linear infinite;
-        }
-      `}</style>
     </div>
   );
 }

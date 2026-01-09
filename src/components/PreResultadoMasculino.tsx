@@ -79,6 +79,15 @@ export default function PreResultadoMasculino() {
   // Componente de Feed Horizontal com CSS puro
   const HorizontalFeedMasculino = () => {
     const [isPaused, setIsPaused] = useState(false);
+    const [isReady, setIsReady] = useState(false);
+
+    // Aguardar um momento para o DOM estar pronto antes de iniciar animação
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setIsReady(true);
+      }, 100);
+      return () => clearTimeout(timer);
+    }, []);
 
     // Duplicar cards 3x para criar loop infinito verdadeiro
     const infiniteCards = [...cards, ...cards, ...cards];
@@ -86,7 +95,7 @@ export default function PreResultadoMasculino() {
     return (
       <div className="relative w-full overflow-hidden py-8">
         <div
-          className={`flex gap-6 ${isPaused ? '' : 'animate-scroll-horizontal'}`}
+          className={`flex gap-6 ${isReady && !isPaused ? 'animate-scroll-horizontal' : ''}`}
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
           onTouchStart={() => setIsPaused(true)}
@@ -405,21 +414,6 @@ export default function PreResultadoMasculino() {
           </button>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes scroll-horizontal {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-33.333%);
-          }
-        }
-
-        .animate-scroll-horizontal {
-          animation: scroll-horizontal 25s linear infinite;
-        }
-      `}</style>
     </div>
   );
 }
