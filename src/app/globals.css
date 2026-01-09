@@ -128,3 +128,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Animação para o carrossel horizontal infinito */
+@keyframes scroll-horizontal {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.animate-scroll-horizontal {
+  animation: scroll-horizontal 25s linear infinite;
+}
