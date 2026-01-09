@@ -8,8 +8,14 @@ import Image from 'next/image';
 
 export default function PreResultadoMasculino() {
   const router = useRouter();
-  const { getThemeColors, updateQuizData, isAdmin } = useQuiz();
-  const colors = getThemeColors();
+  const { updateQuizData, isAdmin } = useQuiz();
+
+  // FORÇAR cores roxas masculinas (não depender do getThemeColors)
+  const colors = {
+    primary: '#9333EA',
+    primaryLight: '#A855F7',
+    primaryDark: '#7E22CE',
+  };
 
   // Marca o quiz como concluído quando chegar nesta página (exceto admin)
   useEffect(() => {
