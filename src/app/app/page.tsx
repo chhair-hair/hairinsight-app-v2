@@ -1,7 +1,7 @@
 'use client';
 
 import { useRoutine } from '@/lib/routine-context';
-import { Sparkles, Home, Calendar, User, Settings, TrendingUp, Droplets, Wind, Clock, ShoppingBag, CheckCircle2, Package } from 'lucide-react';
+import { Sparkles, Home, Calendar, User, Settings, TrendingUp, Droplets, Wind, Clock, ShoppingBag, CheckCircle2, Package, Play, X, ChevronRight, Timer, Info } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -9,6 +9,10 @@ export default function AppPage() {
   const router = useRouter();
   const { userRoutine, generateMockRoutine } = useRoutine();
   const [activeTab, setActiveTab] = useState<'inicio' | 'rotina' | 'perfil' | 'config'>('inicio');
+  const [showUpdateAnalysisModal, setShowUpdateAnalysisModal] = useState(false);
+  const [showComingSoonModal, setShowComingSoonModal] = useState(false);
+  const [showRoutineGuide, setShowRoutineGuide] = useState(false);
+  const [currentGuideStep, setCurrentGuideStep] = useState(0);
 
   // Gerar rotina mock ao carregar a página se não existir
   useEffect(() => {
