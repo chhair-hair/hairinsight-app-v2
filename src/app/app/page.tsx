@@ -26,120 +26,89 @@ export default function AppPage() {
   };
 
   const handleAnalyzeClick = () => {
-    generateMockRoutine();
-    setActiveTab('inicio');
+    setShowUpdateAnalysisModal(true);
+  };
+
+  const handleRedoQuiz = () => {
+    setShowUpdateAnalysisModal(false);
+    router.push('/quiz');
   };
 
   const handleProductsClick = () => {
-    setActiveTab('rotina');
+    setShowComingSoonModal(true);
+  };
+
+  const handleStartRoutineGuide = () => {
+    setShowRoutineGuide(true);
+    setCurrentGuideStep(0);
   };
 
   const colors = {
     primary: '#D4AF37',
   };
 
-  return (
-    <div className="min-h-screen bg-[#0D0D0D]">
-      {/* Header Premium */}
-      <header className="border-b border-white/10 backdrop-blur-lg bg-white/5 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg"
-                style={{ 
-                  background: `linear-gradient(135deg, ${colors.primary}, ${colors.primary}dd)`,
-                }}
-              >
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold">HairInsight</h1>
-                <p className="text-xs text-white/50">Premium</p>
-              </div>
-            </div>
-            
-            {/* Navigation Buttons - Clicáveis */}
-            <nav className="hidden md:flex gap-2">
-              <button 
-                onClick={() => handleTabClick('inicio')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${
-                  activeTab === 'inicio' 
-                    ? 'bg-white/10 text-white shadow-lg' 
-                    : 'text-white/60 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                <Home className="w-5 h-5" />
-                <span className="font-medium">Início</span>
-              </button>
-              <button 
-                onClick={() => handleTabClick('rotina')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${
-                  activeTab === 'rotina' 
-                    ? 'bg-white/10 text-white shadow-lg' 
-                    : 'text-white/60 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                <Calendar className="w-5 h-5" />
-                <span className="font-medium">Rotina</span>
-              </button>
-              <button 
-                onClick={() => handleTabClick('perfil')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${
-                  activeTab === 'perfil' 
-                    ? 'bg-white/10 text-white shadow-lg' 
-                    : 'text-white/60 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                <User className="w-5 h-5" />
-                <span className="font-medium">Perfil</span>
-              </button>
-              <button 
-                onClick={() => handleTabClick('config')}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 ${
-                  activeTab === 'config' 
-                    ? 'bg-white/10 text-white shadow-lg' 
-                    : 'text-white/60 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                <Settings className="w-5 h-5" />
-                <span className="font-medium">Config</span>
-              </button>
-            </nav>
+  // Mock de passos da rotina guiada
+  const routineGuideSteps = [
+    {
+      id: 1,
+      title: 'Lavagem',
+      description: 'Lave o cabelo com água morna e massageie suavemente o couro cabeludo',
+      duration: 180, // segundos
+      illustration: '🚿',
+    },
+    {
+      id: 2,
+      title: 'Aplicação do Shampoo',
+      description: 'Aplique o shampoo da raiz às pontas, fazendo movimentos circulares',
+      duration: 120,
+      illustration: '🧴',
+    },
+    {
+      id: 3,
+      title: 'Enxágue',
+      description: 'Enxágue completamente até remover todo o produto',
+      duration: 90,
+      illustration: '💧',
+    },
+    {
+      id: 4,
+      title: 'Condicionador',
+      description: 'Aplique o condicionador do meio às pontas, evitando a raiz',
+      duration: 150,
+      illustration: '✨',
+    },
+    {
+      id: 5,
+      title: 'Finalização',
+      description: 'Enxágue com água fria para selar as cutículas e dar brilho',
+      duration: 60,
+      illustration: '🌟',
+    },
+  ];
 
-            {/* Mobile Navigation */}
-            <div className="md:hidden flex gap-2">
-              <button 
-                onClick={() => handleTabClick('inicio')}
-                className={`p-2 rounded-lg ${activeTab === 'inicio' ? 'bg-white/10' : 'text-white/60'}`}
-              >
-                <Home className="w-5 h-5" />
-              </button>
-              <button 
-                onClick={() => handleTabClick('rotina')}
-                className={`p-2 rounded-lg ${activeTab === 'rotina' ? 'bg-white/10' : 'text-white/60'}`}
-              >
-                <Calendar className="w-5 h-5" />
-              </button>
-              <button 
-                onClick={() => handleTabClick('perfil')}
-                className={`p-2 rounded-lg ${activeTab === 'perfil' ? 'bg-white/10' : 'text-white/60'}`}
-              >
-                <User className="w-5 h-5" />
-              </button>
-              <button 
-                onClick={() => handleTabClick('config')}
-                className={`p-2 rounded-lg ${activeTab === 'config' ? 'bg-white/10' : 'text-white/60'}`}
-              >
-                <Settings className="w-5 h-5" />
-              </button>
+  return (
+    <div className="min-h-screen bg-[#0D0D0D] pb-24">
+      {/* Header Minimalista */}
+      <header className="border-b border-white/10 backdrop-blur-lg bg-[#0D0D0D]/95 sticky top-0 z-40">
+        <div className="max-w-2xl mx-auto px-4 py-3">
+          <div className="flex items-center justify-center gap-2">
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center"
+              style={{
+                background: `linear-gradient(135deg, ${colors.primary}, ${colors.primary}dd)`,
+              }}
+            >
+              <Sparkles className="w-4 h-4 text-white" />
+            </div>
+            <div>
+              <h1 className="text-base font-bold">HairInsight</h1>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      {/* Main Content - Mobile First */}
+      <main className="max-w-2xl mx-auto px-4 py-6">
         {/* Tab: Início */}
         {activeTab === 'inicio' && (
           <div className="space-y-8">
@@ -243,7 +212,7 @@ export default function AppPage() {
                 </p>
                 <button
                   onClick={handleAnalyzeClick}
-                  className="w-full px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+                  className="w-full px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 active:scale-95"
                   style={{ backgroundColor: colors.primary }}
                 >
                   Fazer Análise Agora
@@ -257,13 +226,55 @@ export default function AppPage() {
                 </p>
                 <button
                   onClick={handleProductsClick}
-                  className="w-full px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2"
+                  className="w-full px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
                   style={{ backgroundColor: colors.primary }}
                 >
                   <ShoppingBag className="w-5 h-5" />
                   Ver Produtos
                 </button>
               </div>
+            </div>
+
+            {/* Sua Rotina de Hoje */}
+            <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-3xl p-8 shadow-2xl backdrop-blur-sm mt-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: colors.primary }}
+                >
+                  <Calendar className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold">Sua Rotina de Hoje</h3>
+                  <p className="text-white/60 text-sm">Siga o passo a passo personalizado</p>
+                </div>
+              </div>
+
+              <div className="bg-white/5 rounded-2xl p-6 border border-white/10 mb-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="text-4xl">☀️</div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-lg">Rotina da Manhã</h4>
+                    <p className="text-white/60 text-sm">5 passos • ~10 minutos</p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleStartRoutineGuide}
+                  className="w-full px-6 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
+                  style={{
+                    background: `linear-gradient(135deg, ${colors.primary}, ${colors.primary}dd)`,
+                    boxShadow: `0 10px 30px -10px ${colors.primary}80`
+                  }}
+                >
+                  <Play className="w-6 h-6" />
+                  <span className="text-lg">Iniciar Rotina</span>
+                </button>
+              </div>
+
+              <p className="text-white/50 text-sm text-center">
+                Um guia interativo vai te acompanhar em cada etapa
+              </p>
             </div>
           </div>
         )}
@@ -406,14 +417,14 @@ export default function AppPage() {
                 ))}
               </div>
 
-              {/* Botão Neutro - Produtos em Breve */}
+              {/* Botão Clicável - Produtos em Breve */}
               <div className="bg-gradient-to-r from-white/10 to-white/5 border border-white/20 rounded-2xl p-6 text-center">
                 <p className="text-white/80 mb-4 text-lg">
                   Estamos preparando uma seleção especial de produtos compatíveis com sua rotina.
                 </p>
                 <button
-                  disabled
-                  className="px-8 py-4 rounded-xl font-semibold bg-white/10 text-white/60 cursor-not-allowed border border-white/20"
+                  onClick={handleProductsClick}
+                  className="px-8 py-4 rounded-xl font-semibold bg-white/10 text-white/80 border border-white/20 transition-all duration-300 hover:bg-white/20 hover:scale-105 active:scale-95"
                 >
                   Produtos compatíveis serão disponibilizados em breve
                 </button>
@@ -523,7 +534,7 @@ export default function AppPage() {
                     <p className="font-semibold">Notificações de Rotina</p>
                     <p className="text-sm text-white/60">Receba lembretes para seguir sua rotina</p>
                   </div>
-                  <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all">
+                  <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 transition-all">
                     Ativar
                   </button>
                 </div>
@@ -532,7 +543,7 @@ export default function AppPage() {
                     <p className="font-semibold">Modo Escuro</p>
                     <p className="text-sm text-white/60">Interface com tema escuro</p>
                   </div>
-                  <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all">
+                  <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 transition-all">
                     Ativo
                   </button>
                 </div>
@@ -541,7 +552,7 @@ export default function AppPage() {
                     <p className="font-semibold">Idioma</p>
                     <p className="text-sm text-white/60">Português (Brasil)</p>
                   </div>
-                  <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition-all">
+                  <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 transition-all">
                     Alterar
                   </button>
                 </div>
@@ -551,15 +562,15 @@ export default function AppPage() {
             <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
               <h3 className="text-xl font-bold mb-6">Conta</h3>
               <div className="space-y-4">
-                <button className="w-full p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-all text-left">
+                <button className="w-full p-4 bg-white/5 rounded-lg hover:bg-white/10 active:scale-95 transition-all text-left">
                   <p className="font-semibold">Editar Perfil</p>
                   <p className="text-sm text-white/60">Atualize suas informações pessoais</p>
                 </button>
-                <button className="w-full p-4 bg-white/5 rounded-lg hover:bg-white/10 transition-all text-left">
+                <button className="w-full p-4 bg-white/5 rounded-lg hover:bg-white/10 active:scale-95 transition-all text-left">
                   <p className="font-semibold">Privacidade</p>
                   <p className="text-sm text-white/60">Gerencie suas preferências de privacidade</p>
                 </button>
-                <button className="w-full p-4 bg-red-500/10 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition-all text-left">
+                <button className="w-full p-4 bg-red-500/10 border border-red-500/20 rounded-lg hover:bg-red-500/20 active:scale-95 transition-all text-left">
                   <p className="font-semibold text-red-400">Sair da Conta</p>
                   <p className="text-sm text-white/60">Desconectar do aplicativo</p>
                 </button>
@@ -568,6 +579,218 @@ export default function AppPage() {
           </div>
         )}
       </main>
+
+      {/* Modal: Atualizar Análise */}
+      {showUpdateAnalysisModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-[#0D0D0D] border border-white/20 rounded-3xl p-8 max-w-md w-full shadow-2xl animate-in fade-in zoom-in duration-300">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: colors.primary }}
+                >
+                  <Sparkles className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold">Atualizar Análise</h3>
+              </div>
+              <button
+                onClick={() => setShowUpdateAnalysisModal(false)}
+                className="p-2 hover:bg-white/10 rounded-lg transition-all active:scale-95"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <p className="text-white/80 mb-6 text-lg leading-relaxed">
+              Você pode refazer a análise do seu cabelo a qualquer momento. Isso atualizará sua rotina personalizada com base nas suas novas respostas.
+            </p>
+
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-6">
+              <div className="flex items-start gap-3">
+                <Info className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: colors.primary }} />
+                <div>
+                  <p className="font-semibold mb-2">O que vai acontecer:</p>
+                  <ul className="space-y-2 text-sm text-white/70">
+                    <li className="flex items-start gap-2">
+                      <span>•</span>
+                      <span>Você vai responder o questionário novamente</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span>•</span>
+                      <span>Uma nova análise será gerada</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span>•</span>
+                      <span>Sua rotina será atualizada automaticamente</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowUpdateAnalysisModal(false)}
+                className="flex-1 px-6 py-3 rounded-xl font-semibold bg-white/10 hover:bg-white/20 transition-all active:scale-95"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleRedoQuiz}
+                className="flex-1 px-6 py-3 rounded-xl font-semibold transition-all hover:scale-105 active:scale-95"
+                style={{ backgroundColor: colors.primary }}
+              >
+                Refazer Análise
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Funcionalidade em Breve */}
+      {showComingSoonModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-[#0D0D0D] border border-white/20 rounded-3xl p-8 max-w-md w-full shadow-2xl animate-in fade-in zoom-in duration-300">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ backgroundColor: colors.primary }}
+                >
+                  <ShoppingBag className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold">Em Breve</h3>
+              </div>
+              <button
+                onClick={() => setShowComingSoonModal(false)}
+                className="p-2 hover:bg-white/10 rounded-lg transition-all active:scale-95"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="text-center py-6">
+              <div className="text-6xl mb-6">🚀</div>
+              <p className="text-white/80 mb-4 text-lg leading-relaxed">
+                Estamos trabalhando para trazer uma seleção incrível de produtos compatíveis com sua rotina!
+              </p>
+              <p className="text-white/60 text-sm">
+                Em breve você poderá comprar produtos específicos recomendados para seu tipo de cabelo.
+              </p>
+            </div>
+
+            <button
+              onClick={() => setShowComingSoonModal(false)}
+              className="w-full px-6 py-3 rounded-xl font-semibold transition-all hover:scale-105 active:scale-95"
+              style={{ backgroundColor: colors.primary }}
+            >
+              Entendi
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Guia da Rotina */}
+      {showRoutineGuide && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
+          <div className="bg-[#0D0D0D] border border-white/20 rounded-3xl p-8 max-w-md w-full shadow-2xl animate-in fade-in zoom-in duration-300">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold"
+                  style={{ backgroundColor: colors.primary }}
+                >
+                  {currentGuideStep + 1}/{routineGuideSteps.length}
+                </div>
+                <h3 className="text-xl font-bold">Rotina Guiada</h3>
+              </div>
+              <button
+                onClick={() => setShowRoutineGuide(false)}
+                className="p-2 hover:bg-white/10 rounded-lg transition-all active:scale-95"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Ilustração */}
+            <div className="text-center mb-6">
+              <div className="text-8xl mb-4 animate-bounce">
+                {routineGuideSteps[currentGuideStep].illustration}
+              </div>
+              <h4 className="text-2xl font-bold mb-3">
+                {routineGuideSteps[currentGuideStep].title}
+              </h4>
+              <p className="text-white/80 text-lg leading-relaxed">
+                {routineGuideSteps[currentGuideStep].description}
+              </p>
+            </div>
+
+            {/* Temporizador */}
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-6">
+              <div className="flex items-center justify-center gap-3">
+                <Timer className="w-6 h-6" style={{ color: colors.primary }} />
+                <div className="text-center">
+                  <p className="text-sm text-white/60 mb-1">Tempo sugerido</p>
+                  <p className="text-3xl font-bold">
+                    {Math.floor(routineGuideSteps[currentGuideStep].duration / 60)}:
+                    {(routineGuideSteps[currentGuideStep].duration % 60).toString().padStart(2, '0')}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Progresso */}
+            <div className="mb-6">
+              <div className="flex gap-1">
+                {routineGuideSteps.map((_, index) => (
+                  <div
+                    key={index}
+                    className="flex-1 h-2 rounded-full transition-all duration-300"
+                    style={{
+                      backgroundColor: index <= currentGuideStep ? colors.primary : '#ffffff20'
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Botões de navegação */}
+            <div className="flex gap-3">
+              {currentGuideStep > 0 && (
+                <button
+                  onClick={() => setCurrentGuideStep(currentGuideStep - 1)}
+                  className="flex-1 px-6 py-3 rounded-xl font-semibold bg-white/10 hover:bg-white/20 transition-all active:scale-95"
+                >
+                  Anterior
+                </button>
+              )}
+              {currentGuideStep < routineGuideSteps.length - 1 ? (
+                <button
+                  onClick={() => setCurrentGuideStep(currentGuideStep + 1)}
+                  className="flex-1 px-6 py-3 rounded-xl font-semibold transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+                  style={{ backgroundColor: colors.primary }}
+                >
+                  <span>Próximo</span>
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setShowRoutineGuide(false);
+                    setCurrentGuideStep(0);
+                  }}
+                  className="flex-1 px-6 py-3 rounded-xl font-semibold transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+                  style={{ backgroundColor: colors.primary }}
+                >
+                  <CheckCircle2 className="w-5 h-5" />
+                  <span>Concluir</span>
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
