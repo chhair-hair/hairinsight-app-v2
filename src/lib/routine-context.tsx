@@ -175,18 +175,46 @@ const mockNightRoutine: RoutineStep[] = [
 export function RoutineProvider({ children }: { children: ReactNode }) {
   const [userRoutine, setUserRoutine] = useState<UserRoutine | null>(null);
 
+  // Função para gerar rotina baseada nos dados do quiz (ou mock se não houver)
   const generateMockRoutine = () => {
-    const mockRoutine: UserRoutine = {
-      hairType: 'Ondulado (Tipo 2B/2C)',
-      mainGoal: 'Hidratação e Definição de Cachos',
-      damageLevel: 'Moderado',
-      tendency: 'Ressecamento e Frizz',
-      morningRoutine: mockMorningRoutine,
-      nightRoutine: mockNightRoutine,
-      allRecommendedProducts: mockProductRecommendations,
-      createdAt: new Date(),
-    };
-    setUserRoutine(mockRoutine);
+    // Tenta carregar dados do quiz do localStorage
+    let quizData = null;
+    try {
+      const saved = localStorage.getItem('hairinsight-quiz');
+      if (saved) {
+        quizData = JSON.parse(saved);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar dados do quiz:', error);
+    }
+
+    // Se tiver dados de análise do quiz, usa eles
+    if (quizData?.analysis && quizData.hasCompletedQuiz) {
+      const routine: UserRoutine = {
+        hairType: quizData.analysis.hairType || 'Ondulado (Tipo 2B/2C)',
+        mainGoal: getMainGoalLabel(quizData.hairGoal) || 'Hidratação e Definição de Cachos',
+        damageLevel: quizData.analysis.damageLevel || 'Moderado',
+        tendency: quizData.analysis.tendency || 'Ressecamento e Frizz',
+        morningRoutine: mockMorningRoutine,
+        nightRoutine: mockNightRoutine,
+        allRecommendedProducts: mockProductRecommendations,
+        createdAt: new Date(),
+      };
+      setUserRoutine(routine);
+    } else {
+      // Senão, usa o mock padrão
+      const mockRoutine: UserRoutine = {
+        hairType: 'Ondulado (Tipo 2B/2C)',
+        mainGoal: 'Hidratação e Definição de Cachos',
+        damageLevel: 'Moderado',
+        tendency: 'Ressecamento e Frizz',
+        morningRoutine: mockMorningRoutine,
+        nightRoutine: mockNightRoutine,
+        allRecommendedProducts: mockProductRecommendations,
+        createdAt: new Date(),
+      };
+      setUserRoutine(mockRoutine);
+    }
   };
 
   const updateRoutine = (updates: Partial<UserRoutine>) => {
@@ -207,6 +235,22 @@ export function RoutineProvider({ children }: { children: ReactNode }) {
       {children}
     </RoutineContext.Provider>
   );
+}
+
+// Função auxiliar para converter o objetivo do quiz em label
+function getMainGoalLabel(hairGoal?: string): string {
+  switch (hairGoal) {
+    case 'hidratacao':
+      return 'Hidratação Profunda';
+    case 'fortalecimento':
+      return 'Fortalecimento e Redução de Queda';
+    case 'controle-frizz':
+      return 'Controle de Frizz e Alinhamento';
+    case 'crescimento':
+      return 'Crescimento Capilar';
+    default:
+      return 'Cuidado Completo';
+  }
 }
 
 export function useRoutine() {

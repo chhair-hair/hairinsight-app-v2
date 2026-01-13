@@ -1,17 +1,13 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Sparkles, ArrowRight, Zap } from 'lucide-react';
+import { Sparkles, ArrowRight } from 'lucide-react';
 
 export default function Home() {
   const router = useRouter();
 
   const handleStartQuiz = () => {
     router.push('/quiz');
-  };
-
-  const handleDirectAccess = () => {
-    router.push('/app');
   };
 
   return (
@@ -105,15 +101,6 @@ export default function Home() {
         >
           <span>Começar Análise</span>
           <ArrowRight className="w-6 h-6" />
-        </button>
-
-        {/* Botão secundário compacto */}
-        <button
-          onClick={handleDirectAccess}
-          className="w-full mt-2 flex items-center justify-center gap-2 px-4 py-2 text-sm text-white/60 transition-all duration-300 active:scale-95"
-        >
-          <Zap className="w-4 h-4" />
-          <span>Acesso Direto (Preview)</span>
         </button>
       </div>
 
