@@ -57,8 +57,8 @@ export default function Home() {
             Rotina personalizada em minutos
           </p>
 
-          {/* Botão de Acesso Direto - Desktop apenas */}
-          <div className="hidden md:flex flex-col sm:flex-row gap-4 justify-center items-center mb-8 animate-fade-in" style={{ animationDelay: '400ms' }}>
+          {/* Botão Principal - Desktop apenas */}
+          <div className="hidden md:flex justify-center items-center mb-12 animate-fade-in" style={{ animationDelay: '400ms' }}>
             <button
               onClick={handleStartQuiz}
               className="inline-flex items-center gap-3 px-8 py-4 rounded-xl text-lg font-semibold text-white transition-all duration-300 shadow-2xl hover:scale-105 active:scale-95"
@@ -69,20 +69,7 @@ export default function Home() {
               <span>Começar Análise</span>
               <ArrowRight className="w-5 h-5" />
             </button>
-
-            <button
-              onClick={handleDirectAccess}
-              className="inline-flex items-center gap-3 px-8 py-4 rounded-xl text-lg font-semibold text-white/90 border-2 border-white/20 transition-all duration-300 hover:bg-white/10 hover:scale-105 active:scale-95 backdrop-blur-sm"
-            >
-              <Zap className="w-5 h-5" />
-              <span>Acesso Direto (Preview)</span>
-            </button>
           </div>
-
-          {/* Nota de Preview - Desktop apenas */}
-          <p className="hidden md:block text-sm text-white/40 mb-12 animate-fade-in" style={{ animationDelay: '450ms' }}>
-            💡 Use "Acesso Direto" para testar o app sem passar pelo quiz
-          </p>
 
           {/* Features - Compactas no mobile */}
           <div
