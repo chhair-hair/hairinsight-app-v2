@@ -452,53 +452,53 @@ export default function AppPage() {
 
         {/* Tab: Rotina */}
         {activeTab === 'rotina' && userRoutine && (
-          <div className="space-y-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Sua Rotina Completa</h2>
-              <p className="text-white/60 text-lg">Siga os passos abaixo para resultados incríveis</p>
+          <div className="space-y-4">
+            <div className="text-center mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">Sua Rotina Completa</h2>
+              <p className="text-white/60 text-sm">Siga os passos abaixo para resultados incríveis</p>
             </div>
 
             {/* Rotina da Manhã */}
-            <div className="bg-gradient-to-br from-orange-500/10 to-yellow-500/10 border border-orange-500/20 rounded-3xl p-8">
-              <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                <span className="text-3xl">☀️</span>
+            <div className="bg-gradient-to-br from-orange-500/10 to-yellow-500/10 border border-orange-500/20 rounded-2xl p-4">
+              <h3 className="text-base font-bold mb-3 flex items-center gap-2">
+                <span className="text-lg">☀️</span>
                 Rotina da Manhã
               </h3>
-              <div className="space-y-6">
+              <div className="space-y-3">
                 {userRoutine.morningRoutine.map((step, index) => (
-                  <div key={step.id} className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                    <div className="flex items-start gap-4">
-                      <div 
-                        className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0"
+                  <div key={step.id} className="bg-white/5 rounded-xl p-3 border border-white/10">
+                    <div className="flex items-start gap-2">
+                      <div
+                        className="w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0"
                         style={{ backgroundColor: colors.primary }}
                       >
                         {index + 1}
                       </div>
                       <div className="flex-1">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-bold text-xl">{step.title}</h4>
+                        <div className="flex items-center justify-between mb-1">
+                          <h4 className="font-bold text-sm">{step.title}</h4>
                           {step.duration && (
-                            <span className="flex items-center gap-1 text-white/60 text-sm">
-                              <Clock className="w-4 h-4" />
+                            <span className="flex items-center gap-1 text-white/60 text-xs">
+                              <Clock className="w-3 h-3" />
                               {step.duration}
                             </span>
                           )}
                         </div>
-                        <p className="text-white/80 mb-4">{step.description}</p>
+                        <p className="text-white/80 text-xs mb-2">{step.description}</p>
                         {step.recommendedProducts.length > 0 && (
-                          <div className="space-y-3">
-                            <p className="text-sm font-semibold text-white/60 flex items-center gap-2">
-                              <Package className="w-4 h-4" />
-                              Tipos de produtos recomendados:
+                          <div className="space-y-2">
+                            <p className="text-xs font-semibold text-white/60 flex items-center gap-1">
+                              <Package className="w-3 h-3" />
+                              Produtos recomendados:
                             </p>
                             {step.recommendedProducts.map((product) => (
-                              <div key={product.id} className="bg-white/5 rounded-lg p-4 border border-white/10">
-                                <p className="font-semibold text-lg mb-1">{product.genericName}</p>
-                                <p className="text-sm text-white/70 mb-2">
+                              <div key={product.id} className="bg-white/5 rounded-lg p-2 border border-white/10">
+                                <p className="font-semibold text-xs mb-0.5">{product.genericName}</p>
+                                <p className="text-[10px] text-white/70 mb-1">
                                   <span className="font-medium">Objetivo:</span> {product.mainGoal}
                                 </p>
-                                <p className="text-sm text-white/60">
-                                  <span className="font-medium">Ativos ideais:</span> {product.keyIngredients.join(', ')}
+                                <p className="text-[10px] text-white/60">
+                                  <span className="font-medium">Ativos:</span> {product.keyIngredients.join(', ')}
                                 </p>
                               </div>
                             ))}
@@ -512,46 +512,46 @@ export default function AppPage() {
             </div>
 
             {/* Rotina da Noite */}
-            <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-3xl p-8">
-              <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                <span className="text-3xl">🌙</span>
+            <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-2xl p-4">
+              <h3 className="text-base font-bold mb-3 flex items-center gap-2">
+                <span className="text-lg">🌙</span>
                 Rotina da Noite
               </h3>
-              <div className="space-y-6">
+              <div className="space-y-3">
                 {userRoutine.nightRoutine.map((step, index) => (
-                  <div key={step.id} className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                    <div className="flex items-start gap-4">
-                      <div 
-                        className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg flex-shrink-0"
+                  <div key={step.id} className="bg-white/5 rounded-xl p-3 border border-white/10">
+                    <div className="flex items-start gap-2">
+                      <div
+                        className="w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0"
                         style={{ backgroundColor: colors.primary }}
                       >
                         {index + 1}
                       </div>
                       <div className="flex-1">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-bold text-xl">{step.title}</h4>
+                        <div className="flex items-center justify-between mb-1">
+                          <h4 className="font-bold text-sm">{step.title}</h4>
                           {step.duration && (
-                            <span className="flex items-center gap-1 text-white/60 text-sm">
-                              <Clock className="w-4 h-4" />
+                            <span className="flex items-center gap-1 text-white/60 text-xs">
+                              <Clock className="w-3 h-3" />
                               {step.duration}
                             </span>
                           )}
                         </div>
-                        <p className="text-white/80 mb-4">{step.description}</p>
+                        <p className="text-white/80 text-xs mb-2">{step.description}</p>
                         {step.recommendedProducts.length > 0 && (
-                          <div className="space-y-3">
-                            <p className="text-sm font-semibold text-white/60 flex items-center gap-2">
-                              <Package className="w-4 h-4" />
-                              Tipos de produtos recomendados:
+                          <div className="space-y-2">
+                            <p className="text-xs font-semibold text-white/60 flex items-center gap-1">
+                              <Package className="w-3 h-3" />
+                              Produtos recomendados:
                             </p>
                             {step.recommendedProducts.map((product) => (
-                              <div key={product.id} className="bg-white/5 rounded-lg p-4 border border-white/10">
-                                <p className="font-semibold text-lg mb-1">{product.genericName}</p>
-                                <p className="text-sm text-white/70 mb-2">
+                              <div key={product.id} className="bg-white/5 rounded-lg p-2 border border-white/10">
+                                <p className="font-semibold text-xs mb-0.5">{product.genericName}</p>
+                                <p className="text-[10px] text-white/70 mb-1">
                                   <span className="font-medium">Objetivo:</span> {product.mainGoal}
                                 </p>
-                                <p className="text-sm text-white/60">
-                                  <span className="font-medium">Ativos ideais:</span> {product.keyIngredients.join(', ')}
+                                <p className="text-[10px] text-white/60">
+                                  <span className="font-medium">Ativos:</span> {product.keyIngredients.join(', ')}
                                 </p>
                               </div>
                             ))}
@@ -565,23 +565,23 @@ export default function AppPage() {
             </div>
 
             {/* Lista Completa de Produtos Recomendados */}
-            <div className="bg-white/5 border border-white/10 rounded-3xl p-8">
-              <h3 className="text-2xl font-bold mb-6 flex items-center gap-3">
-                <ShoppingBag className="w-7 h-7" style={{ color: colors.primary }} />
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-4">
+              <h3 className="text-base font-bold mb-3 flex items-center gap-2">
+                <ShoppingBag className="w-4 h-4" style={{ color: colors.primary }} />
                 Todos os Produtos Recomendados
               </h3>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
                 {userRoutine.allRecommendedProducts.map((product) => (
-                  <div key={product.id} className="bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105">
-                    <div className="mb-4">
-                      <h4 className="font-bold text-lg mb-2">{product.genericName}</h4>
-                      <p className="text-sm text-white/70 mb-3">
+                  <div key={product.id} className="bg-white/5 rounded-xl p-3 border border-white/10 hover:bg-white/10 transition-all">
+                    <div>
+                      <h4 className="font-bold text-sm mb-1">{product.genericName}</h4>
+                      <p className="text-xs text-white/70 mb-2">
                         <span className="font-medium">Objetivo:</span> {product.mainGoal}
                       </p>
-                      <p className="text-sm text-white/60 mb-3">{product.description}</p>
-                      <div className="bg-white/5 rounded-lg p-3 border border-white/10">
-                        <p className="text-xs font-semibold text-white/50 mb-1">Ativos ideais:</p>
-                        <p className="text-sm text-white/80">{product.keyIngredients.join(', ')}</p>
+                      <p className="text-xs text-white/60 mb-2">{product.description}</p>
+                      <div className="bg-white/5 rounded-lg p-2 border border-white/10">
+                        <p className="text-[10px] font-semibold text-white/50 mb-0.5">Ativos ideais:</p>
+                        <p className="text-xs text-white/80">{product.keyIngredients.join(', ')}</p>
                       </div>
                     </div>
                   </div>
@@ -589,15 +589,15 @@ export default function AppPage() {
               </div>
 
               {/* Botão Clicável - Produtos em Breve */}
-              <div className="bg-gradient-to-r from-white/10 to-white/5 border border-white/20 rounded-2xl p-6 text-center">
-                <p className="text-white/80 mb-4 text-lg">
-                  Estamos preparando uma seleção especial de produtos compatíveis com sua rotina.
+              <div className="bg-gradient-to-r from-white/10 to-white/5 border border-white/20 rounded-xl p-4 text-center">
+                <p className="text-white/80 mb-3 text-sm">
+                  Estamos preparando uma seleção especial de produtos compatíveis.
                 </p>
                 <button
                   onClick={handleProductsClick}
-                  className="px-8 py-4 rounded-xl font-semibold bg-white/10 text-white/80 border border-white/20 transition-all duration-300 hover:bg-white/20 hover:scale-105 active:scale-95"
+                  className="px-4 py-2 text-sm rounded-lg font-semibold bg-white/10 text-white/80 border border-white/20 transition-all hover:bg-white/20 hover:scale-105 active:scale-95"
                 >
-                  Produtos compatíveis serão disponibilizados em breve
+                  Em breve: produtos compatíveis
                 </button>
               </div>
             </div>
@@ -606,83 +606,83 @@ export default function AppPage() {
 
         {/* Tab: Perfil */}
         {activeTab === 'perfil' && userRoutine && (
-          <div className="space-y-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Seu Perfil Capilar</h2>
-              <p className="text-white/60 text-lg">Informações baseadas na sua análise</p>
+          <div className="space-y-4">
+            <div className="text-center mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">Seu Perfil Capilar</h2>
+              <p className="text-white/60 text-sm">Informações baseadas na sua análise</p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-3">
               {/* Tipo de Cabelo */}
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <Wind className="w-8 h-8" style={{ color: colors.primary }} />
-                  <h3 className="text-2xl font-bold">Tipo de Cabelo</h3>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Wind className="w-4 h-4" style={{ color: colors.primary }} />
+                  <h3 className="text-sm font-bold">Tipo de Cabelo</h3>
                 </div>
-                <p className="text-white/80 text-xl font-semibold mb-2">{userRoutine.hairType}</p>
-                <p className="text-white/60">
-                  Seu cabelo possui características específicas que requerem cuidados personalizados.
+                <p className="text-white/80 text-base font-semibold mb-1">{userRoutine.hairType}</p>
+                <p className="text-white/60 text-xs">
+                  Características específicas que requerem cuidados personalizados.
                 </p>
               </div>
 
               {/* Objetivo Principal */}
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <TrendingUp className="w-8 h-8" style={{ color: colors.primary }} />
-                  <h3 className="text-2xl font-bold">Objetivo Principal</h3>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <TrendingUp className="w-4 h-4" style={{ color: colors.primary }} />
+                  <h3 className="text-sm font-bold">Objetivo Principal</h3>
                 </div>
-                <p className="text-white/80 text-xl font-semibold mb-2">{userRoutine.mainGoal}</p>
-                <p className="text-white/60">
-                  Foco principal da sua rotina capilar personalizada.
+                <p className="text-white/80 text-base font-semibold mb-1">{userRoutine.mainGoal}</p>
+                <p className="text-white/60 text-xs">
+                  Foco principal da sua rotina capilar.
                 </p>
               </div>
 
               {/* Nível de Dano */}
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <Droplets className="w-8 h-8" style={{ color: colors.primary }} />
-                  <h3 className="text-2xl font-bold">Nível de Dano</h3>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Droplets className="w-4 h-4" style={{ color: colors.primary }} />
+                  <h3 className="text-sm font-bold">Nível de Dano</h3>
                 </div>
-                <p className="text-white/80 text-xl font-semibold mb-2">{userRoutine.damageLevel}</p>
-                <p className="text-white/60">
-                  Estado atual dos seus fios e necessidade de tratamento.
+                <p className="text-white/80 text-base font-semibold mb-1">{userRoutine.damageLevel}</p>
+                <p className="text-white/60 text-xs">
+                  Estado atual e necessidade de tratamento.
                 </p>
               </div>
 
               {/* Tendência */}
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
-                <div className="flex items-center gap-3 mb-4">
-                  <Sparkles className="w-8 h-8" style={{ color: colors.primary }} />
-                  <h3 className="text-2xl font-bold">Tendência</h3>
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Sparkles className="w-4 h-4" style={{ color: colors.primary }} />
+                  <h3 className="text-sm font-bold">Tendência</h3>
                 </div>
-                <p className="text-white/80 text-xl font-semibold mb-2">{userRoutine.tendency}</p>
-                <p className="text-white/60">
-                  Características predominantes que precisam de atenção especial.
+                <p className="text-white/80 text-base font-semibold mb-1">{userRoutine.tendency}</p>
+                <p className="text-white/60 text-xs">
+                  Características que precisam de atenção.
                 </p>
               </div>
             </div>
 
             {/* Estatísticas */}
-            <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-3xl p-8">
-              <h3 className="text-2xl font-bold mb-6">Estatísticas da Rotina</h3>
-              <div className="grid md:grid-cols-3 gap-6">
+            <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-2xl p-4">
+              <h3 className="text-base font-bold mb-3">Estatísticas da Rotina</h3>
+              <div className="grid md:grid-cols-3 gap-3">
                 <div className="text-center">
-                  <p className="text-4xl font-bold mb-2" style={{ color: colors.primary }}>
+                  <p className="text-2xl font-bold mb-1" style={{ color: colors.primary }}>
                     {userRoutine.morningRoutine.length}
                   </p>
-                  <p className="text-white/60">Passos pela Manhã</p>
+                  <p className="text-white/60 text-xs">Passos pela Manhã</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-4xl font-bold mb-2" style={{ color: colors.primary }}>
+                  <p className="text-2xl font-bold mb-1" style={{ color: colors.primary }}>
                     {userRoutine.nightRoutine.length}
                   </p>
-                  <p className="text-white/60">Passos à Noite</p>
+                  <p className="text-white/60 text-xs">Passos à Noite</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-4xl font-bold mb-2" style={{ color: colors.primary }}>
+                  <p className="text-2xl font-bold mb-1" style={{ color: colors.primary }}>
                     {userRoutine.allRecommendedProducts.length}
                   </p>
-                  <p className="text-white/60">Tipos de Produtos</p>
+                  <p className="text-white/60 text-xs">Tipos de Produtos</p>
                 </div>
               </div>
             </div>
@@ -691,22 +691,22 @@ export default function AppPage() {
 
         {/* Tab: Histórico */}
         {activeTab === 'historico' && (
-          <div className="space-y-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Histórico de Rotinas</h2>
-              <p className="text-white/60 text-lg">Acompanhe suas rotinas concluídas</p>
+          <div className="space-y-4">
+            <div className="text-center mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">Histórico de Rotinas</h2>
+              <p className="text-white/60 text-sm">Acompanhe suas rotinas concluídas</p>
             </div>
 
             {routineHistory.length === 0 ? (
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-12 text-center">
-                <div className="text-6xl mb-6">📋</div>
-                <h3 className="text-xl font-bold mb-3">Nenhuma rotina concluída ainda</h3>
-                <p className="text-white/60 mb-6">
+              <div className="bg-white/5 border border-white/10 rounded-xl p-8 text-center">
+                <div className="text-4xl mb-4">📋</div>
+                <h3 className="text-base font-bold mb-2">Nenhuma rotina concluída ainda</h3>
+                <p className="text-white/60 text-sm mb-4">
                   Complete sua primeira rotina para começar seu histórico
                 </p>
                 <button
                   onClick={() => setActiveTab('inicio')}
-                  className="px-6 py-3 rounded-xl font-semibold transition-all hover:scale-105 active:scale-95"
+                  className="px-4 py-2 text-sm rounded-lg font-semibold transition-all hover:scale-105 active:scale-95"
                   style={{ backgroundColor: colors.primary }}
                 >
                   Ir para Início
@@ -715,68 +715,68 @@ export default function AppPage() {
             ) : (
               <>
                 {/* Estatísticas */}
-                <div className="grid md:grid-cols-3 gap-6 mb-8">
-                  <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-2xl p-6 text-center">
-                    <p className="text-4xl font-bold mb-2" style={{ color: colors.primary }}>
+                <div className="grid md:grid-cols-3 gap-3 mb-4">
+                  <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-xl p-4 text-center">
+                    <p className="text-2xl font-bold mb-1" style={{ color: colors.primary }}>
                       {routineHistory.length}
                     </p>
-                    <p className="text-white/60">Rotinas Completas</p>
+                    <p className="text-white/60 text-xs">Rotinas Completas</p>
                   </div>
-                  <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-2xl p-6 text-center">
-                    <p className="text-4xl font-bold mb-2" style={{ color: colors.primary }}>
+                  <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-xl p-4 text-center">
+                    <p className="text-2xl font-bold mb-1" style={{ color: colors.primary }}>
                       {routineHistory.filter(h => h.type === 'morning').length}
                     </p>
-                    <p className="text-white/60">Rotinas da Manhã</p>
+                    <p className="text-white/60 text-xs">Rotinas da Manhã</p>
                   </div>
-                  <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-2xl p-6 text-center">
-                    <p className="text-4xl font-bold mb-2" style={{ color: colors.primary }}>
+                  <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-xl p-4 text-center">
+                    <p className="text-2xl font-bold mb-1" style={{ color: colors.primary }}>
                       {routineHistory.filter(h => h.type === 'night').length}
                     </p>
-                    <p className="text-white/60">Rotinas da Noite</p>
+                    <p className="text-white/60 text-xs">Rotinas da Noite</p>
                   </div>
                 </div>
 
                 {/* Lista de Histórico */}
-                <div className="space-y-4">
+                <div className="space-y-2">
                   {routineHistory.map((history) => (
                     <div
                       key={history.id}
-                      className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all"
+                      className="bg-white/5 border border-white/10 rounded-xl p-3 hover:bg-white/10 transition-all"
                     >
                       <div className="flex items-start justify-between">
-                        <div className="flex items-start gap-4 flex-1">
+                        <div className="flex items-start gap-2 flex-1">
                           <div
-                            className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
+                            className="w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0"
                             style={{ backgroundColor: `${colors.primary}30` }}
                           >
                             {history.type === 'morning' ? '☀️' : '🌙'}
                           </div>
                           <div className="flex-1">
-                            <h4 className="font-bold text-lg mb-2">
+                            <h4 className="font-bold text-sm mb-1">
                               Rotina {history.type === 'morning' ? 'da Manhã' : 'da Noite'}
                             </h4>
-                            <div className="flex flex-wrap gap-4 text-sm text-white/60">
-                              <span className="flex items-center gap-1">
-                                <Calendar className="w-4 h-4" />
+                            <div className="flex flex-wrap gap-2 text-xs text-white/60">
+                              <span className="flex items-center gap-0.5">
+                                <Calendar className="w-3 h-3" />
                                 {new Date(history.date).toLocaleDateString('pt-BR', {
                                   day: '2-digit',
                                   month: 'short',
                                   year: 'numeric',
                                 })}
                               </span>
-                              <span className="flex items-center gap-1">
-                                <Clock className="w-4 h-4" />
+                              <span className="flex items-center gap-0.5">
+                                <Clock className="w-3 h-3" />
                                 {Math.floor(history.duration / 60)} min
                               </span>
-                              <span className="flex items-center gap-1">
-                                <CheckCircle2 className="w-4 h-4" />
+                              <span className="flex items-center gap-0.5">
+                                <CheckCircle2 className="w-3 h-3" />
                                 {history.completedSteps}/{history.totalSteps} passos
                               </span>
                             </div>
                           </div>
                         </div>
                         <div
-                          className="px-4 py-2 rounded-lg text-sm font-bold"
+                          className="px-2 py-1 rounded-md text-xs font-bold"
                           style={{ backgroundColor: `${colors.primary}30`, color: colors.primary }}
                         >
                           Completa
@@ -792,59 +792,59 @@ export default function AppPage() {
 
         {/* Tab: Config */}
         {activeTab === 'config' && (
-          <div className="space-y-8">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Configurações</h2>
-              <p className="text-white/60 text-lg">Personalize sua experiência</p>
+          <div className="space-y-4">
+            <div className="text-center mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2">Configurações</h2>
+              <p className="text-white/60 text-sm">Personalize sua experiência</p>
             </div>
 
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
-              <h3 className="text-xl font-bold mb-6">Preferências</h3>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-white/5 rounded-lg">
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+              <h3 className="text-base font-bold mb-3">Preferências</h3>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                   <div>
-                    <p className="font-semibold">Notificações de Rotina</p>
-                    <p className="text-sm text-white/60">Receba lembretes para seguir sua rotina</p>
+                    <p className="font-semibold text-sm">Notificações de Rotina</p>
+                    <p className="text-xs text-white/60">Receba lembretes</p>
                   </div>
-                  <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 transition-all">
+                  <button className="px-3 py-1.5 text-xs rounded-md bg-white/10 hover:bg-white/20 active:scale-95 transition-all">
                     Ativar
                   </button>
                 </div>
-                <div className="flex items-center justify-between p-4 bg-white/5 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                   <div>
-                    <p className="font-semibold">Modo Escuro</p>
-                    <p className="text-sm text-white/60">Interface com tema escuro</p>
+                    <p className="font-semibold text-sm">Modo Escuro</p>
+                    <p className="text-xs text-white/60">Tema escuro</p>
                   </div>
-                  <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 transition-all">
+                  <button className="px-3 py-1.5 text-xs rounded-md bg-white/10 hover:bg-white/20 active:scale-95 transition-all">
                     Ativo
                   </button>
                 </div>
-                <div className="flex items-center justify-between p-4 bg-white/5 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                   <div>
-                    <p className="font-semibold">Idioma</p>
-                    <p className="text-sm text-white/60">Português (Brasil)</p>
+                    <p className="font-semibold text-sm">Idioma</p>
+                    <p className="text-xs text-white/60">Português (Brasil)</p>
                   </div>
-                  <button className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 active:scale-95 transition-all">
+                  <button className="px-3 py-1.5 text-xs rounded-md bg-white/10 hover:bg-white/20 active:scale-95 transition-all">
                     Alterar
                   </button>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-8">
-              <h3 className="text-xl font-bold mb-6">Conta</h3>
-              <div className="space-y-4">
-                <button className="w-full p-4 bg-white/5 rounded-lg hover:bg-white/10 active:scale-95 transition-all text-left">
-                  <p className="font-semibold">Editar Perfil</p>
-                  <p className="text-sm text-white/60">Atualize suas informações pessoais</p>
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4">
+              <h3 className="text-base font-bold mb-3">Conta</h3>
+              <div className="space-y-2">
+                <button className="w-full p-3 bg-white/5 rounded-lg hover:bg-white/10 active:scale-95 transition-all text-left">
+                  <p className="font-semibold text-sm">Editar Perfil</p>
+                  <p className="text-xs text-white/60">Atualize suas informações</p>
                 </button>
-                <button className="w-full p-4 bg-white/5 rounded-lg hover:bg-white/10 active:scale-95 transition-all text-left">
-                  <p className="font-semibold">Privacidade</p>
-                  <p className="text-sm text-white/60">Gerencie suas preferências de privacidade</p>
+                <button className="w-full p-3 bg-white/5 rounded-lg hover:bg-white/10 active:scale-95 transition-all text-left">
+                  <p className="font-semibold text-sm">Privacidade</p>
+                  <p className="text-xs text-white/60">Gerencie preferências</p>
                 </button>
-                <button className="w-full p-4 bg-red-500/10 border border-red-500/20 rounded-lg hover:bg-red-500/20 active:scale-95 transition-all text-left">
-                  <p className="font-semibold text-red-400">Sair da Conta</p>
-                  <p className="text-sm text-white/60">Desconectar do aplicativo</p>
+                <button className="w-full p-3 bg-red-500/10 border border-red-500/20 rounded-lg hover:bg-red-500/20 active:scale-95 transition-all text-left">
+                  <p className="font-semibold text-sm text-red-400">Sair da Conta</p>
+                  <p className="text-xs text-white/60">Desconectar</p>
                 </button>
               </div>
             </div>
