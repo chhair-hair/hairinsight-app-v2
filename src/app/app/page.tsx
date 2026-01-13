@@ -18,7 +18,7 @@ interface RoutineHistory {
 export default function AppPage() {
   const router = useRouter();
   const { userRoutine, generateMockRoutine } = useRoutine();
-  const { getThemeColors } = useQuiz();
+  const { quizData, getThemeColors } = useQuiz();
   const [activeTab, setActiveTab] = useState<'inicio' | 'rotina' | 'perfil' | 'config' | 'historico'>('inicio');
   const [showUpdateAnalysisModal, setShowUpdateAnalysisModal] = useState(false);
   const [showComingSoonModal, setShowComingSoonModal] = useState(false);
@@ -28,6 +28,7 @@ export default function AppPage() {
   const [currentStepTimer, setCurrentStepTimer] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [routineHistory, setRoutineHistory] = useState<RoutineHistory[]>([]);
+  const [showSuccessCard, setShowSuccessCard] = useState(false);
 
   // Gerar rotina mock ao carregar a página se não existir
   useEffect(() => {
@@ -35,6 +36,24 @@ export default function AppPage() {
       generateMockRoutine();
     }
   }, [userRoutine, generateMockRoutine]);
+
+  // Detectar se voltou da reanálise com sucesso
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('updated') === 'true') {
+        setShowSuccessCard(true);
+        // Remove o parâmetro da URL
+        window.history.replaceState({}, '', '/app');
+        // Recarrega a rotina com os novos dados
+        generateMockRoutine();
+        // Fecha o card após 5 segundos
+        setTimeout(() => {
+          setShowSuccessCard(false);
+        }, 5000);
+      }
+    }
+  }, []);
 
   const handleTabClick = (tab: 'inicio' | 'rotina' | 'perfil' | 'config') => {
     setActiveTab(tab);
@@ -46,7 +65,12 @@ export default function AppPage() {
 
   const handleRedoQuiz = () => {
     setShowUpdateAnalysisModal(false);
-    router.push('/quiz');
+    // Redireciona baseado no gênero para a reanálise correta
+    if (quizData.gender === 'masculino') {
+      router.push('/reanalise-masculina');
+    } else {
+      router.push('/reanalise-feminina');
+    }
   };
 
   const handleProductsClick = () => {
@@ -935,6 +959,39 @@ export default function AppPage() {
             >
               Entendi
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Card de Sucesso - Reanálise Concluída */}
+      {showSuccessCard && (
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 max-w-md w-full px-4 animate-in fade-in slide-in-from-top duration-500">
+          <div
+            className="bg-gradient-to-br from-white/20 to-white/10 border border-white/30 rounded-2xl p-6 shadow-2xl backdrop-blur-lg"
+            style={{
+              boxShadow: `0 20px 40px -10px ${colors.primary}40`
+            }}
+          >
+            <div className="flex items-start gap-4">
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ backgroundColor: colors.primary }}
+              >
+                <CheckCircle2 className="w-6 h-6 text-white" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-bold text-white mb-1">Rotina Atualizada!</h3>
+                <p className="text-white/80 text-sm">
+                  Suas informações foram analisadas com sucesso e sua rotina foi atualizada com base nas novas respostas.
+                </p>
+              </div>
+              <button
+                onClick={() => setShowSuccessCard(false)}
+                className="p-1 hover:bg-white/10 rounded-lg transition-all active:scale-95 flex-shrink-0"
+              >
+                <X className="w-5 h-5 text-white/60" />
+              </button>
+            </div>
           </div>
         </div>
       )}
