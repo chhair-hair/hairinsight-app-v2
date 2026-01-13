@@ -83,6 +83,16 @@ function saveToLocalStorage(key: string, data: QuizData) {
         console.error('Não foi possível salvar dados no localStorage:', retryError);
         // Se ainda assim falhar, limpa o localStorage e tenta novamente
         try {
+          const essentialData: QuizData = {
+            gender: data.gender,
+            hairType: data.hairType,
+            washFrequency: data.washFrequency,
+            productType: data.productType,
+            productTypeOther: data.productTypeOther,
+            heatTools: data.heatTools,
+            hairGoal: data.hairGoal,
+            hasCompletedQuiz: data.hasCompletedQuiz,
+          };
           localStorage.clear();
           localStorage.setItem(key, JSON.stringify(essentialData));
         } catch (finalError) {
