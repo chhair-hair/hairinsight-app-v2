@@ -229,91 +229,91 @@ export default function AppPage() {
       </header>
 
       {/* Main Content - Mobile First */}
-      <main className="max-w-2xl mx-auto px-4 py-6">
+      <main className="max-w-2xl mx-auto px-4 py-3">
         {/* Tab: Início */}
         {activeTab === 'inicio' && (
-          <div className="space-y-8">
+          <div className="space-y-4">
             {/* Welcome Section */}
-            <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+            <div className="text-center mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold mb-2 bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
                 Sua Rotina Personalizada
               </h2>
-              <p className="text-white/60 text-lg max-w-2xl mx-auto">
-                Baseada em análise inteligente do seu tipo de cabelo e necessidades específicas
+              <p className="text-white/60 text-sm max-w-2xl mx-auto">
+                Baseada em análise inteligente do seu tipo de cabelo
               </p>
             </div>
 
             {/* Análise da IA - Com dados reais */}
             {userRoutine && (
-              <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-3xl p-8 shadow-2xl backdrop-blur-sm">
-                <div className="flex items-center gap-3 mb-6">
-                  <div 
-                    className="w-12 h-12 rounded-xl flex items-center justify-center"
+              <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-2xl p-4 shadow-2xl backdrop-blur-sm">
+                <div className="flex items-center gap-2 mb-3">
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center"
                     style={{ backgroundColor: colors.primary }}
                   >
-                    <Sparkles className="w-6 h-6 text-white" />
+                    <Sparkles className="w-4 h-4 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold">Resumo da Sua Análise</h3>
-                    <p className="text-white/60 text-sm">Atualizada em {new Date(userRoutine.createdAt).toLocaleDateString('pt-BR')}</p>
+                    <h3 className="text-base font-bold">Resumo da Sua Análise</h3>
+                    <p className="text-white/60 text-xs">Atualizada em {new Date(userRoutine.createdAt).toLocaleDateString('pt-BR')}</p>
                   </div>
                 </div>
 
                 {/* Cards de Análise - Dados Reais */}
-                <div className="grid md:grid-cols-3 gap-6 mb-8">
-                  <div className="bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105">
-                    <div className="flex items-center gap-3 mb-3">
-                      <Wind className="w-6 h-6" style={{ color: colors.primary }} />
-                      <h4 className="font-semibold text-lg">Tipo de Cabelo</h4>
+                <div className="grid md:grid-cols-3 gap-2 mb-3">
+                  <div className="bg-white/5 rounded-xl p-3 border border-white/10 hover:bg-white/10 transition-all">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <Wind className="w-3.5 h-3.5" style={{ color: colors.primary }} />
+                      <h4 className="font-semibold text-xs">Tipo de Cabelo</h4>
                     </div>
-                    <p className="text-white/80 text-xl font-bold">{userRoutine.hairType}</p>
+                    <p className="text-white/80 text-sm font-bold">{userRoutine.hairType}</p>
                   </div>
-                  
-                  <div className="bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105">
-                    <div className="flex items-center gap-3 mb-3">
-                      <TrendingUp className="w-6 h-6" style={{ color: colors.primary }} />
-                      <h4 className="font-semibold text-lg">Objetivo Principal</h4>
+
+                  <div className="bg-white/5 rounded-xl p-3 border border-white/10 hover:bg-white/10 transition-all">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <TrendingUp className="w-3.5 h-3.5" style={{ color: colors.primary }} />
+                      <h4 className="font-semibold text-xs">Objetivo Principal</h4>
                     </div>
-                    <p className="text-white/80 text-xl font-bold">{userRoutine.mainGoal}</p>
+                    <p className="text-white/80 text-sm font-bold">{userRoutine.mainGoal}</p>
                   </div>
-                  
-                  <div className="bg-white/5 rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105">
-                    <div className="flex items-center gap-3 mb-3">
-                      <Droplets className="w-6 h-6" style={{ color: colors.primary }} />
-                      <h4 className="font-semibold text-lg">Tendência</h4>
+
+                  <div className="bg-white/5 rounded-xl p-3 border border-white/10 hover:bg-white/10 transition-all">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <Droplets className="w-3.5 h-3.5" style={{ color: colors.primary }} />
+                      <h4 className="font-semibold text-xs">Tendência</h4>
                     </div>
-                    <p className="text-white/80 text-xl font-bold">{userRoutine.tendency}</p>
+                    <p className="text-white/80 text-sm font-bold">{userRoutine.tendency}</p>
                   </div>
                 </div>
 
                 {/* Resumo da Rotina */}
-                <div className="bg-white/5 rounded-2xl p-8 border border-white/10">
-                  <h4 className="font-bold text-xl mb-6 flex items-center gap-2">
-                    <Calendar className="w-6 h-6" style={{ color: colors.primary }} />
+                <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+                  <h4 className="font-bold text-sm mb-2 flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5" style={{ color: colors.primary }} />
                     Resumo da Rotina Diária
                   </h4>
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <div className="grid md:grid-cols-2 gap-3">
                     <div>
-                      <h5 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                        <span className="text-2xl">☀️</span> Manhã
+                      <h5 className="font-semibold text-xs mb-1.5 flex items-center gap-1">
+                        <span className="text-sm">☀️</span> Manhã
                       </h5>
-                      <ul className="space-y-2">
+                      <ul className="space-y-1">
                         {userRoutine.morningRoutine.map((step) => (
-                          <li key={step.id} className="flex items-start gap-2 text-white/80">
-                            <CheckCircle2 className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: colors.primary }} />
+                          <li key={step.id} className="flex items-start gap-1 text-white/80 text-xs">
+                            <CheckCircle2 className="w-3 h-3 mt-0.5 flex-shrink-0" style={{ color: colors.primary }} />
                             <span>{step.title}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
                     <div>
-                      <h5 className="font-semibold text-lg mb-3 flex items-center gap-2">
-                        <span className="text-2xl">🌙</span> Noite
+                      <h5 className="font-semibold text-xs mb-1.5 flex items-center gap-1">
+                        <span className="text-sm">🌙</span> Noite
                       </h5>
-                      <ul className="space-y-2">
+                      <ul className="space-y-1">
                         {userRoutine.nightRoutine.map((step) => (
-                          <li key={step.id} className="flex items-start gap-2 text-white/80">
-                            <CheckCircle2 className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: colors.primary }} />
+                          <li key={step.id} className="flex items-start gap-1 text-white/80 text-xs">
+                            <CheckCircle2 className="w-3 h-3 mt-0.5 flex-shrink-0" style={{ color: colors.primary }} />
                             <span>{step.title}</span>
                           </li>
                         ))}
@@ -325,67 +325,67 @@ export default function AppPage() {
             )}
 
             {/* Quick Actions */}
-            <div className="grid md:grid-cols-2 gap-6 mt-8">
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300">
-                <h4 className="font-bold text-xl mb-4">Atualizar Análise</h4>
-                <p className="text-white/60 mb-6">
-                  Refaça a análise para atualizar sua rotina com base em novas informações.
+            <div className="grid md:grid-cols-2 gap-3 mt-4">
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all">
+                <h4 className="font-bold text-sm mb-2">Atualizar Análise</h4>
+                <p className="text-white/60 text-xs mb-3">
+                  Refaça a análise para atualizar sua rotina.
                 </p>
                 <button
                   onClick={handleAnalyzeClick}
-                  className="w-full px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 active:scale-95"
+                  className="w-full px-4 py-2 text-sm rounded-lg font-semibold transition-all hover:scale-105 active:scale-95"
                   style={{ backgroundColor: colors.primary }}
                 >
                   Fazer Análise Agora
                 </button>
               </div>
 
-              <div className="bg-white/5 border border-white/10 rounded-2xl p-8 hover:bg-white/10 transition-all duration-300">
-                <h4 className="font-bold text-xl mb-4">Produtos Recomendados</h4>
-                <p className="text-white/60 mb-6">
-                  {userRoutine ? `${userRoutine.allRecommendedProducts.length} tipos de produtos selecionados para você` : 'Produtos específicos para seu tipo de cabelo'}
+              <div className="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all">
+                <h4 className="font-bold text-sm mb-2">Produtos Recomendados</h4>
+                <p className="text-white/60 text-xs mb-3">
+                  {userRoutine ? `${userRoutine.allRecommendedProducts.length} tipos selecionados para você` : 'Produtos específicos'}
                 </p>
                 <button
                   onClick={handleProductsClick}
-                  className="w-full px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+                  className="w-full px-4 py-2 text-sm rounded-lg font-semibold transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-1.5"
                   style={{ backgroundColor: colors.primary }}
                 >
-                  <ShoppingBag className="w-5 h-5" />
+                  <ShoppingBag className="w-4 h-4" />
                   Ver Produtos
                 </button>
               </div>
             </div>
 
             {/* Sua Rotina de Hoje */}
-            <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-3xl p-8 shadow-2xl backdrop-blur-sm mt-8">
-              <div className="flex items-center gap-3 mb-6">
+            <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-2xl p-4 shadow-2xl backdrop-blur-sm mt-4">
+              <div className="flex items-center gap-2 mb-3">
                 <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center"
                   style={{ backgroundColor: colors.primary }}
                 >
-                  <Calendar className="w-6 h-6 text-white" />
+                  <Calendar className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold">Rotina de Hoje</h3>
-                  <p className="text-white/60 text-sm">Siga o passo a passo personalizado</p>
+                  <h3 className="text-base font-bold">Rotina de Hoje</h3>
+                  <p className="text-white/60 text-xs">Siga o passo a passo</p>
                 </div>
               </div>
 
               {/* Informações da rotina - PRIMEIRO */}
-              <div className="mb-6 space-y-4">
-                <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="text-3xl">☀️</div>
+              <div className="mb-3 space-y-2">
+                <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="text-lg">☀️</div>
                     <div>
-                      <h4 className="font-bold text-lg">Rotina da Manhã</h4>
-                      <p className="text-white/60 text-sm">Passos para começar o dia</p>
+                      <h4 className="font-bold text-sm">Rotina da Manhã</h4>
+                      <p className="text-white/60 text-xs">Passos para começar o dia</p>
                     </div>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-1.5">
                     {userRoutine?.morningRoutine.map((step, index) => (
-                      <div key={step.id} className="flex items-start gap-3 text-sm">
+                      <div key={step.id} className="flex items-start gap-2 text-xs">
                         <div
-                          className="w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5"
+                          className="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5"
                           style={{ backgroundColor: colors.primary }}
                         >
                           {index + 1}
@@ -393,7 +393,7 @@ export default function AppPage() {
                         <div>
                           <p className="font-semibold text-white/90">{step.title}</p>
                           {step.duration && (
-                            <p className="text-white/50 text-xs">{step.duration}</p>
+                            <p className="text-white/50 text-[10px]">{step.duration}</p>
                           )}
                         </div>
                       </div>
@@ -401,19 +401,19 @@ export default function AppPage() {
                   </div>
                 </div>
 
-                <div className="bg-white/5 rounded-2xl p-6 border border-white/10">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="text-3xl">🌙</div>
+                <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="text-lg">🌙</div>
                     <div>
-                      <h4 className="font-bold text-lg">Rotina da Noite</h4>
-                      <p className="text-white/60 text-sm">Cuidados antes de dormir</p>
+                      <h4 className="font-bold text-sm">Rotina da Noite</h4>
+                      <p className="text-white/60 text-xs">Cuidados antes de dormir</p>
                     </div>
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-1.5">
                     {userRoutine?.nightRoutine.map((step, index) => (
-                      <div key={step.id} className="flex items-start gap-3 text-sm">
+                      <div key={step.id} className="flex items-start gap-2 text-xs">
                         <div
-                          className="w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0 mt-0.5"
+                          className="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5"
                           style={{ backgroundColor: colors.primary }}
                         >
                           {index + 1}
@@ -421,7 +421,7 @@ export default function AppPage() {
                         <div>
                           <p className="font-semibold text-white/90">{step.title}</p>
                           {step.duration && (
-                            <p className="text-white/50 text-xs">{step.duration}</p>
+                            <p className="text-white/50 text-[10px]">{step.duration}</p>
                           )}
                         </div>
                       </div>
@@ -433,18 +433,18 @@ export default function AppPage() {
               {/* Botão de iniciar - DEPOIS */}
               <button
                 onClick={handleStartRoutine}
-                className="w-full px-6 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-3"
+                className="w-full px-4 py-3 text-sm rounded-xl font-semibold transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
                 style={{
                   background: `linear-gradient(135deg, ${colors.primary}, ${colors.primary}dd)`,
                   boxShadow: `0 10px 30px -10px ${colors.primary}80`
                 }}
               >
-                <Play className="w-6 h-6" />
-                <span className="text-lg">Iniciar Rotina</span>
+                <Play className="w-4 h-4" />
+                <span>Iniciar Rotina</span>
               </button>
 
-              <p className="text-white/50 text-sm text-center mt-4">
-                Um timer interativo vai te guiar em cada etapa
+              <p className="text-white/50 text-xs text-center mt-2">
+                Timer interativo vai te guiar em cada etapa
               </p>
             </div>
           </div>
