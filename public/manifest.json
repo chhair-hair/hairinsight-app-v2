@@ -2,7 +2,7 @@
   "name": "HairInsight - Análise Capilar IA",
   "short_name": "HairInsight",
   "description": "Sua rotina capilar personalizada com análise de IA",
-  "start_url": "/",
+  "start_url": "/app",
   "display": "standalone",
   "background_color": "#0D0D0D",
   "theme_color": "#FF6F91",

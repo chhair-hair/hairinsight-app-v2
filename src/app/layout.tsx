@@ -4,10 +4,24 @@ import Script from "next/script";
 import "./globals.css";
 import { QuizProvider } from "@/lib/quiz-context";
 import { RoutineProvider } from "@/lib/routine-context";
+import PWAInstall from "@/components/PWAInstall";
 
 export const metadata: Metadata = {
   title: "HairInsight - Análise Capilar Inteligente",
   description: "Seu assistente pessoal de cuidados capilares com IA",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "HairInsight",
+  },
+  themeColor: "#0D0D0D",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
 };
 
 export default function RootLayout({
@@ -19,6 +33,9 @@ export default function RootLayout({
     <html lang="pt-BR">
       <head>
         <Script src="/lasy-bridge.js" strategy="beforeInteractive" />
+        <Script src="/register-sw.js" strategy="afterInteractive" />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/icon.svg" />
       </head>
       <body
         className="font-inter antialiased bg-[#0D0D0D] text-white"
@@ -26,6 +43,7 @@ export default function RootLayout({
         <QuizProvider>
           <RoutineProvider>
             {children}
+            <PWAInstall />
           </RoutineProvider>
         </QuizProvider>
       </body>
