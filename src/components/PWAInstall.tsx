@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { Download, X, Smartphone } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -11,8 +12,16 @@ interface BeforeInstallPromptEvent extends Event {
 export default function PWAInstall() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallBanner, setShowInstallBanner] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
+    // SÓ MOSTRA se estiver na rota /app (depois do obrigado)
+    const isInApp = pathname === '/app';
+    if (!isInApp) {
+      setShowInstallBanner(false);
+      return;
+    }
+
     // Verifica se já está instalado
     const isInstalled = window.matchMedia('(display-mode: standalone)').matches;
     const wasDismissed = localStorage.getItem('pwa-install-dismissed');
@@ -29,7 +38,7 @@ export default function PWAInstall() {
 
       return () => window.removeEventListener('beforeinstallprompt', handler);
     }
-  }, []);
+  }, [pathname]);
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
