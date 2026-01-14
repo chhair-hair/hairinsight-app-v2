@@ -834,6 +834,23 @@ export default function AppPage() {
               </div>
             </div>
 
+            {/* Instalar App */}
+            <div className="bg-gradient-to-br from-purple-600/10 to-pink-600/10 border border-purple-500/20 rounded-xl p-4">
+              <h3 className="text-base font-bold mb-3">Instalar Aplicativo</h3>
+              <div className="space-y-2">
+                <button
+                  onClick={() => {
+                    // Dispara evento customizado para o PWAInstall
+                    window.dispatchEvent(new Event('trigger-pwa-install'));
+                  }}
+                  className="w-full p-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg hover:opacity-90 active:scale-95 transition-all text-left"
+                >
+                  <p className="font-semibold text-sm text-white">Adicionar à Tela Inicial</p>
+                  <p className="text-xs text-white/80">Instale o app para acesso rápido</p>
+                </button>
+              </div>
+            </div>
+
             <div className="bg-white/5 border border-white/10 rounded-xl p-4">
               <h3 className="text-base font-bold mb-3">Conta</h3>
               <div className="space-y-2">
@@ -847,7 +864,7 @@ export default function AppPage() {
                 </button>
                 <button className="w-full p-3 bg-red-500/10 border border-red-500/20 rounded-lg hover:bg-red-500/20 active:scale-95 transition-all text-left">
                   <p className="font-semibold text-sm text-red-400">Sair da Conta</p>
-                  <p className="text-xs text-white/60">Desconectar</p>
+                  <p className="text-xs text-white/60">Desconecionar</p>
                 </button>
               </div>
             </div>
