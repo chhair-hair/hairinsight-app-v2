@@ -806,8 +806,11 @@ export default function AppPage() {
                     <p className="font-semibold text-sm">Notificações de Rotina</p>
                     <p className="text-xs text-white/60">Receba lembretes</p>
                   </div>
-                  <button className="px-3 py-1.5 text-xs rounded-md bg-white/10 hover:bg-white/20 active:scale-95 transition-all">
-                    Ativar
+                  <button
+                    onClick={() => router.push('/notificacoes')}
+                    className="px-3 py-1.5 text-xs rounded-md bg-white/10 hover:bg-white/20 active:scale-95 transition-all"
+                  >
+                    Configurar
                   </button>
                 </div>
                 <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
