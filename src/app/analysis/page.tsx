@@ -6,11 +6,11 @@ import { Camera, Upload, Sparkles, ArrowRight, CheckCircle2 } from 'lucide-react
 import { Gender } from '@/lib/types';
 
 export default function AnalysisPage() {
-  const [gender] = useState<Gender>('female'); // TODO: Get from context/state
+  const [gender] = useState<Gender>('feminino'); // TODO: Get from context/state
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  
-  const accentColor = gender === 'female' ? '#FF6F91' : '#9B59B6';
+
+  const accentColor = gender === 'feminino' ? '#FF6F91' : '#9B59B6';
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

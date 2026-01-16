@@ -6,9 +6,9 @@ import { Calendar, Clock, CheckCircle2, Circle, Plus } from 'lucide-react';
 import { Gender } from '@/lib/types';
 
 export default function SchedulePage() {
-  const [gender] = useState<Gender>('female'); // TODO: Get from context/state
-  
-  const accentColor = gender === 'female' ? '#FF6F91' : '#9B59B6';
+  const [gender] = useState<Gender>('feminino'); // TODO: Get from context/state
+
+  const accentColor = gender === 'feminino' ? '#FF6F91' : '#9B59B6';
 
   const schedules = [
     {

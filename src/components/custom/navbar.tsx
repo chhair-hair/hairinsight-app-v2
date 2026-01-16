@@ -13,8 +13,8 @@ interface NavbarProps {
 export default function Navbar({ gender }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  
-  const accentColor = gender === 'female' ? '#FF6F91' : '#9B59B6';
+
+  const accentColor = gender === 'feminino' ? '#FF6F91' : '#9B59B6';
   
   const navItems = [
     { href: '/', icon: Home, label: 'Início' },

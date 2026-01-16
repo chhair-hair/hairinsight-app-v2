@@ -6,9 +6,9 @@ import { ShoppingBag, Star, TrendingUp, Package } from 'lucide-react';
 import { Gender } from '@/lib/types';
 
 export default function ProductsPage() {
-  const [gender] = useState<Gender>('female'); // TODO: Get from context/state
-  
-  const accentColor = gender === 'female' ? '#FF6F91' : '#9B59B6';
+  const [gender] = useState<Gender>('feminino'); // TODO: Get from context/state
+
+  const accentColor = gender === 'feminino' ? '#FF6F91' : '#9B59B6';
 
   return (
     <div className="min-h-screen">

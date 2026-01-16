@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '@/components/custom/navbar';
 import { MessageCircle, Send, Sparkles, Loader2 } from 'lucide-react';
 import { useQuiz } from '@/lib/quiz-context';
+import { Gender } from '@/lib/types';
 
 interface Message {
   id: number;
@@ -14,6 +15,7 @@ interface Message {
 
 export default function ChatPage() {
   const { quizData, getThemeColors } = useQuiz();
+  const gender: Gender = quizData?.gender || 'feminino';
   const colors = getThemeColors();
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -72,7 +74,7 @@ export default function ChatPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <Navbar gender={gender} />
       
       <main className="flex-1 pt-24 pb-6 px-4 sm:px-6 lg:px-8 flex flex-col">
         <div className="max-w-4xl w-full mx-auto flex flex-col flex-1">
