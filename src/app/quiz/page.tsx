@@ -216,7 +216,7 @@ export default function QuizPage() {
                     updateQuizData({ productTypeOther: answers.productTypeOther });
                     setIsTransitioning(true);
                     setTimeout(() => {
-                      if (step === totalSteps) {
+                      if (step >= totalSteps) {
                         router.push('/quiz/photos');
                       } else {
                         setStep(step + 1);
