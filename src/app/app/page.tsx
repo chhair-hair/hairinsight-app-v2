@@ -326,6 +326,23 @@ export default function AppPage() {
 
             {/* Quick Actions */}
             <div className="grid md:grid-cols-2 gap-3 mt-4">
+              {/* Novo Card: Resultado Completo */}
+              <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-xl p-4 hover:scale-105 transition-all cursor-pointer" onClick={() => router.push('/resultado-completo')}>
+                <div className="flex items-center gap-2 mb-2">
+                  <Sparkles className="w-5 h-5" style={{ color: colors.primary }} />
+                  <h4 className="font-bold text-sm">Resultado Completo</h4>
+                </div>
+                <p className="text-white/80 text-xs mb-3">
+                  Veja sua análise detalhada, pontos críticos e calendário personalizado
+                </p>
+                <button
+                  className="w-full px-4 py-2 text-sm rounded-lg font-semibold transition-all bg-white/20 hover:bg-white/30 flex items-center justify-center gap-1.5"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                  Ver Detalhes
+                </button>
+              </div>
+
               <div className="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all">
                 <h4 className="font-bold text-sm mb-2">Atualizar Análise</h4>
                 <p className="text-white/60 text-xs mb-3">
