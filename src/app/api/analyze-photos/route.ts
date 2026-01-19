@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
-// ✅ SEGURANÇA: API Key APENAS no servidor via variável de ambiente
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // Variável de ambiente SERVER-SIDE
-});
-
 export async function POST(request: NextRequest) {
   try {
     // Verificar se a chave API está configurada
