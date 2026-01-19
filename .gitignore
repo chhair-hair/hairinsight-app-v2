@@ -42,6 +42,7 @@ coverage/
 *.log
 Thumbs.db
 
-# NOTE: .env files are NOT ignored - they are important for the project
-.vercel
+# Environment variables - NEVER commit these files!
+.env
 .env*.local
+.vercel
