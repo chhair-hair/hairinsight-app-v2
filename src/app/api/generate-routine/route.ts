@@ -3,18 +3,17 @@ import OpenAI from 'openai';
 
 export async function POST(request: NextRequest) {
   try {
-    // ✅ SEGURANÇA: API Key APENAS no servidor via variável de ambiente
-    // Inicializa OpenAI apenas quando a rota é chamada
-    if (!process.env.OPENAI_API_KEY) {
+    // ✅ SEGURANÇA: Busca chave da variável de ambiente da plataforma
+    const apiKey = process.env.OPENAI_API_KEY_SECRET || process.env.OPENAI_API_KEY;
+
+    if (!apiKey) {
       return NextResponse.json(
-        { error: 'OpenAI API key não configurada' },
+        { error: 'OpenAI API key não configurada nas variáveis de ambiente' },
         { status: 500 }
       );
     }
 
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
+    const openai = new OpenAI({ apiKey });
 
     const body = await request.json();
     const { quizData, analysis } = body;

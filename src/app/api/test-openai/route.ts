@@ -2,33 +2,42 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   try {
-    // Verificar variável de ambiente
+    // Verificar variáveis de ambiente (prioriza OPENAI_API_KEY_SECRET da plataforma)
+    const apiKeySecret = process.env.OPENAI_API_KEY_SECRET;
     const apiKey = process.env.OPENAI_API_KEY;
+    const finalKey = apiKeySecret || apiKey;
 
-    if (!apiKey) {
+    const result: any = {
+      OPENAI_API_KEY_SECRET: apiKeySecret ? 'Configurada ✅' : 'Não encontrada ❌',
+      OPENAI_API_KEY: apiKey ? 'Configurada ✅' : 'Não encontrada ❌',
+      keyUsed: apiKeySecret ? 'OPENAI_API_KEY_SECRET (plataforma)' : (apiKey ? 'OPENAI_API_KEY (local)' : 'Nenhuma')
+    };
+
+    if (!finalKey) {
       return NextResponse.json({
         success: false,
-        error: 'OPENAI_API_KEY não está configurada',
-        env: 'não encontrada'
+        error: 'Nenhuma chave OpenAI configurada',
+        ...result
       });
     }
 
-    if (apiKey === 'your_openai_api_key_here') {
+    if (finalKey === 'your_openai_api_key_here') {
       return NextResponse.json({
         success: false,
-        error: 'OPENAI_API_KEY ainda está com valor padrão',
-        env: 'valor padrão'
+        error: 'Chave ainda está com valor padrão',
+        ...result
       });
     }
 
     // Verificar formato da chave
-    const keyFormat = apiKey.substring(0, 8) + '...';
+    const keyFormat = finalKey.substring(0, 10) + '...';
 
     return NextResponse.json({
       success: true,
-      message: 'Chave configurada corretamente',
+      message: 'Chave configurada corretamente ✅',
       keyFormat,
-      keyLength: apiKey.length
+      keyLength: finalKey.length,
+      ...result
     });
   } catch (error: any) {
     return NextResponse.json({
