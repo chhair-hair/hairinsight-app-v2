@@ -2,6 +2,7 @@
 
 import { useRoutine } from '@/lib/routine-context';
 import { useQuiz } from '@/lib/quiz-context';
+import AppHeader from '@/components/custom/app-header';
 import { Sparkles, Home, Calendar, User, Settings, TrendingUp, Droplets, Wind, Clock, ShoppingBag, CheckCircle2, Package, Play, X, ChevronRight, Timer, Info, ArrowLeft, Pause } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -209,27 +210,11 @@ export default function AppPage() {
 
   return (
     <div className="min-h-screen bg-[#0D0D0D] pb-24">
-      {/* Header Minimalista */}
-      <header className="border-b border-white/10 backdrop-blur-lg bg-[#0D0D0D]/95 sticky top-0 z-40">
-        <div className="max-w-2xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-center gap-2">
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{
-                background: `linear-gradient(135deg, ${colors.primary}, ${colors.primary}dd)`,
-              }}
-            >
-              <Sparkles className="w-4 h-4 text-white" />
-            </div>
-            <div>
-              <h1 className="text-base font-bold">HairInsight</h1>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* Header com AppHeader */}
+      <AppHeader accentColor={colors.primary} />
 
       {/* Main Content - Mobile First */}
-      <main className="max-w-2xl mx-auto px-4 py-3">
+      <main className="max-w-2xl mx-auto px-4 py-3 pt-20">
         {/* Tab: Início */}
         {activeTab === 'inicio' && (
           <div className="space-y-4">
