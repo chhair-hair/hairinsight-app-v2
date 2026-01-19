@@ -1,23 +1,31 @@
 // ✅ SEGURANÇA: Cliente-side faz chamadas APENAS para API routes
 // NUNCA expõe API keys no frontend
 
-export async function analyzeHairPhotos(photos: { left?: string; right?: string; down?: string }) {
+export async function analyzeHairPhotos(
+  photos: { left?: string; right?: string; down?: string },
+  quizData?: any
+) {
   const images = [photos.left, photos.right, photos.down].filter(Boolean);
 
   if (images.length === 0) {
     throw new Error('Nenhuma foto fornecida para análise');
   }
 
-  console.log('Enviando fotos para análise...');
+  console.log('Enviando fotos e dados do quiz para análise...');
+  console.log('Dados do quiz:', {
+    hairType: quizData?.hairType,
+    hairGoal: quizData?.hairGoal,
+    washFrequency: quizData?.washFrequency
+  });
 
   try {
-    // Chamar API route segura (server-side)
+    // Chamar API route segura (server-side) com dados do quiz
     const response = await fetch('/api/analyze-photos', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ photos }),
+      body: JSON.stringify({ photos, quizData }),
     });
 
     console.log('[Frontend] Resposta recebida:', response.status, response.statusText);

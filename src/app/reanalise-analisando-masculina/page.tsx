@@ -23,34 +23,49 @@ export default function ReanaliseAnalisandoMascPage() {
           return;
         }
 
-        // Chamar API da OpenAI para analisar as fotos
-        const analysis = await analyzeHairPhotos(quizData.photos);
+        // Chamar API da OpenAI para analisar as fotos COM dados do quiz
+        const analysis = await analyzeHairPhotos(quizData.photos, quizData);
 
         if (analysis) {
 
-          // Gerar rotina completa baseada na análise da OpenAI
+          // Gerar rotina completa baseada na análise da OpenAI COM CONTEXTO DO QUIZ
           const fullRoutine = `
-Rotina Diária:
-${analysis.recommendations?.immediate?.map((rec: string, i: number) => `${i + 1}. ${rec}`).join('\n') || '1. Lavar com shampoo suave\n2. Aplicar condicionador\n3. Usar leave-in'}
+📊 ANÁLISE VISUAL:
+• Tipo Observado: ${analysis.hairType}
+${analysis.hairTypeMatch === false ? `⚠️ Nota: Nas fotos, seu cabelo aparenta ser ${analysis.hairType}, diferente do que foi informado no questionário (${quizData.hairType}). Vamos trabalhar com o tipo observado!` : ''}
+• Nível de Dano: ${analysis.damageLevel}
+• Tendência: ${analysis.tendency}
+• Porosidade: ${analysis.porosity}
+• Espessura: ${analysis.thickness}
+• Saúde do Couro Cabeludo: ${analysis.scalpHealth}
 
-Rotina Semanal:
-${analysis.recommendations?.weekly?.map((rec: string, i: number) => `${i + 1}. ${rec}`).join('\n') || '1. Máscara de hidratação\n2. Umectação\n3. Cronograma capilar'}
+🎯 SEU OBJETIVO: ${quizData.hairGoal?.toUpperCase().replace('-', ' ') || 'SAÚDE CAPILAR'}
+${analysis.goalAlignment?.message || 'Continue seguindo as recomendações abaixo'}
+${analysis.goalAlignment?.isOnTrack ? '✅ Você está no caminho certo!' : '⚠️ Vamos ajustar sua rotina para alcançar seu objetivo'}
 
-Rotina Mensal:
-${analysis.recommendations?.monthly?.map((rec: string, i: number) => `${i + 1}. ${rec}`).join('\n') || '1. Corte de pontas\n2. Tratamento profundo\n3. Nutrição intensiva'}
+🚨 ATENÇÃO NECESSÁRIA:
+${analysis.criticalIssues?.map((issue: string) => `• ${issue}`).join('\n') || '• Nenhum problema crítico identificado'}
 
-Análise Detalhada:
-- Tipo: ${analysis.hairType}
-- Dano: ${analysis.damageLevel}
-- Tendência: ${analysis.tendency}
-- Porosidade: ${analysis.porosity}
-- Espessura: ${analysis.thickness}
+✨ PONTOS FORTES:
+${analysis.strengths?.map((strength: string) => `• ${strength}`).join('\n') || '• Mantenha os cuidados atuais'}
 
-Problemas Identificados:
-${analysis.criticalIssues?.map((issue: string) => `• ${issue}`).join('\n') || '• Nenhum problema crítico'}
+📅 ROTINA DIÁRIA (aplicar hoje mesmo):
+${analysis.recommendations?.immediate?.map((rec: string, i: number) => `${i + 1}. ${rec}`).join('\n') || '1. Lavar com shampoo adequado ao seu tipo\n2. Aplicar condicionador nas pontas\n3. Usar leave-in ou creme de pentear'}
 
-Pontos Fortes:
-${analysis.strengths?.map((strength: string) => `• ${strength}`).join('\n') || '• Cabelo saudável'}
+📅 ROTINA SEMANAL (repetir toda semana):
+${analysis.recommendations?.weekly?.map((rec: string, i: number) => `${i + 1}. ${rec}`).join('\n') || '1. Máscara de hidratação profunda\n2. Tratamento específico para seu objetivo\n3. Descanso capilar (sem químicas)'}
+
+📅 ROTINA MENSAL (1x por mês):
+${analysis.recommendations?.monthly?.map((rec: string, i: number) => `${i + 1}. ${rec}`).join('\n') || '1. Corte de pontas\n2. Tratamento profissional\n3. Avaliação de progresso'}
+
+💊 PRODUTOS - O QUE PRIORIZAR:
+${analysis.productSuggestions?.prioritize?.map((item: string) => `✅ ${item}`).join('\n') || '✅ Produtos adequados ao seu tipo de cabelo'}
+
+🚫 PRODUTOS - O QUE EVITAR:
+${analysis.productSuggestions?.avoid?.map((item: string) => `❌ ${item}`).join('\n') || '❌ Produtos com muitos químicos agressivos'}
+
+⚙️ AJUSTES NA SUA ROTINA ATUAL:
+${analysis.routineAdjustments?.map((adj: string) => `• ${adj}`).join('\n') || '• Continue sua rotina atual'}
           `;
 
           // Atualizar dados do quiz com análise real da OpenAI
