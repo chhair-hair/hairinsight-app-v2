@@ -3,17 +3,26 @@ import OpenAI from 'openai';
 
 export async function POST(request: NextRequest) {
   try {
-    // Verificar se a chave API está configurada
-    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'your_openai_api_key_here') {
+    // Buscar chave da OpenAI das variáveis de ambiente (prioriza OPENAI_API_KEY_SECRET da plataforma)
+    const apiKey = process.env.OPENAI_API_KEY_SECRET || process.env.OPENAI_API_KEY;
+
+    console.log('[OpenAI] Verificando chave API...');
+    console.log('[OpenAI] OPENAI_API_KEY_SECRET:', process.env.OPENAI_API_KEY_SECRET ? 'Encontrada' : 'Não encontrada');
+    console.log('[OpenAI] OPENAI_API_KEY:', process.env.OPENAI_API_KEY ? 'Encontrada' : 'Não encontrada');
+
+    if (!apiKey || apiKey === 'your_openai_api_key_here') {
       console.error('OPENAI_API_KEY não configurada ou inválida');
       return NextResponse.json(
         {
           error: 'Chave da OpenAI não configurada',
-          details: 'Configure OPENAI_API_KEY no arquivo .env.local com sua chave da OpenAI'
+          details: 'A variável de ambiente OPENAI_API_KEY_SECRET ou OPENAI_API_KEY precisa estar configurada'
         },
         { status: 500 }
       );
     }
+
+    // Criar cliente OpenAI com a chave encontrada
+    const openai = new OpenAI({ apiKey });
 
     const body = await request.json();
     const { photos, quizData } = body;
