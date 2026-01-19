@@ -1,67 +1,84 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuiz } from '@/lib/quiz-context';
 import { Sparkles, Loader2 } from 'lucide-react';
+import { analyzeHairPhotos } from '@/lib/openai';
 
 export default function ReanaliseAnalisandoFemPage() {
   const router = useRouter();
   const { quizData, updateQuizData, getThemeColors } = useQuiz();
   const colors = getThemeColors();
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Gerar análise baseada nos dados do quiz
-    const generateAnalysis = () => {
-      const hairTypeMap = {
-        liso: 'Cabelo Liso',
-        ondulado: 'Cabelo Ondulado',
-        cacheado: 'Cabelo Cacheado',
-        crespo: 'Cabelo Crespo'
-      };
+    // Analisar fotos usando OpenAI Vision API
+    const performAnalysis = async () => {
+      try {
+        // Verificar se existem fotos
+        if (!quizData.photos?.left || !quizData.photos?.right || !quizData.photos?.down) {
+          setError('Fotos não encontradas. Redirecionando...');
+          setTimeout(() => router.push('/reanalise-photos-feminina'), 2000);
+          return;
+        }
 
-      const damageLevel = quizData.heatTools === 'sim-regularmente' ? 'Alto' :
-                         quizData.heatTools === 'sim-ocasionalmente' ? 'Médio' : 'Baixo';
+        // Chamar API da OpenAI para analisar as fotos
+        const analysis = await analyzeHairPhotos(quizData.photos);
 
-      const tendency = quizData.hairGoal === 'hidratacao' ? 'Desidratação' :
-                      quizData.hairGoal === 'fortalecimento' ? 'Quebra' :
-                      quizData.hairGoal === 'controle-frizz' ? 'Frizz' : 'Crescimento lento';
+        if (analysis) {
 
-      const fullRoutine = `
+          // Gerar rotina completa baseada na análise da OpenAI
+          const fullRoutine = `
 Rotina Diária:
-1. Lavagem: Use shampoo suave 2-3x por semana
-2. Condicionamento: Aplique condicionador em todo o comprimento
-3. Hidratação: Máscara hidratante 1-2x por semana
+${analysis.recommendations?.immediate?.map((rec: string, i: number) => `${i + 1}. ${rec}`).join('\n') || '1. Lavar com shampoo suave\n2. Aplicar condicionador\n3. Usar leave-in'}
 
 Rotina Semanal:
-1. Umectação: Aplicar óleo capilar para selar a hidratação
-2. Proteção térmica: Sempre antes de usar ferramentas de calor
-3. Corte: Manutenção a cada 6-8 semanas
+${analysis.recommendations?.weekly?.map((rec: string, i: number) => `${i + 1}. ${rec}`).join('\n') || '1. Máscara de hidratação\n2. Umectação\n3. Cronograma capilar'}
 
-Produtos Recomendados:
-- Shampoo: Para ${hairTypeMap[quizData.hairType || 'liso']}
-- Condicionador: Com ${quizData.productType === 'naturais' ? 'ingredientes naturais' : 'hidratação intensa'}
-- Máscara: ${quizData.hairGoal === 'hidratacao' ? 'Hidratação profunda' : 'Fortalecimento'}
-      `;
+Rotina Mensal:
+${analysis.recommendations?.monthly?.map((rec: string, i: number) => `${i + 1}. ${rec}`).join('\n') || '1. Corte de pontas\n2. Tratamento profundo\n3. Nutrição intensiva'}
 
-      updateQuizData({
-        analysis: {
-          hairType: hairTypeMap[quizData.hairType || 'liso'],
-          damageLevel,
-          tendency,
-          fullRoutine: fullRoutine.trim()
+Análise Detalhada:
+- Tipo: ${analysis.hairType}
+- Dano: ${analysis.damageLevel}
+- Tendência: ${analysis.tendency}
+- Porosidade: ${analysis.porosity}
+- Espessura: ${analysis.thickness}
+
+Problemas Identificados:
+${analysis.criticalIssues?.map((issue: string) => `• ${issue}`).join('\n') || '• Nenhum problema crítico'}
+
+Pontos Fortes:
+${analysis.strengths?.map((strength: string) => `• ${strength}`).join('\n') || '• Cabelo saudável'}
+          `;
+
+          // Atualizar dados do quiz com análise real da OpenAI
+          updateQuizData({
+            analysis: {
+              hairType: analysis.hairType,
+              damageLevel: analysis.damageLevel,
+              tendency: analysis.tendency,
+              fullRoutine: fullRoutine.trim()
+            }
+          });
+
+          // Redirecionar após análise completa
+          setTimeout(() => {
+            router.push('/app?updated=true');
+          }, 2000);
+        } else {
+          setError('Erro ao analisar fotos');
+          setTimeout(() => router.push('/reanalise-photos-feminina'), 3000);
         }
-      });
+      } catch (err: any) {
+        console.error('Erro na análise:', err);
+        setError('Erro ao processar análise. Redirecionando...');
+        setTimeout(() => router.push('/reanalise-photos-feminina'), 3000);
+      }
     };
 
-    generateAnalysis();
-
-    // Simula análise IA por 3 segundos e volta pro app com parâmetro de sucesso
-    const timer = setTimeout(() => {
-      router.push('/app?updated=true');
-    }, 3000);
-
-    return () => clearTimeout(timer);
+    performAnalysis();
   }, []);
 
   return (
@@ -101,29 +118,33 @@ Produtos Recomendados:
         </div>
 
         {/* Progress Messages */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-3 text-left">
-            <div
-              className="w-2 h-2 rounded-full animate-pulse"
-              style={{ backgroundColor: colors.primary }}
-            />
-            <span className="text-white/80">Analisando tipo de cabelo...</span>
+        {error ? (
+          <div className="text-red-400 text-sm">{error}</div>
+        ) : (
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 text-left">
+              <div
+                className="w-2 h-2 rounded-full animate-pulse"
+                style={{ backgroundColor: colors.primary }}
+              />
+              <span className="text-white/80">Analisando tipo de cabelo com OpenAI Vision...</span>
+            </div>
+            <div className="flex items-center gap-3 text-left">
+              <div
+                className="w-2 h-2 rounded-full animate-pulse"
+                style={{ backgroundColor: colors.primary }}
+              />
+              <span className="text-white/80">Avaliando porosidade e espessura dos fios...</span>
+            </div>
+            <div className="flex items-center gap-3 text-left">
+              <div
+                className="w-2 h-2 rounded-full animate-pulse"
+                style={{ backgroundColor: colors.primary }}
+              />
+              <span className="text-white/80">Gerando recomendações personalizadas...</span>
+            </div>
           </div>
-          <div className="flex items-center gap-3 text-left">
-            <div
-              className="w-2 h-2 rounded-full animate-pulse"
-              style={{ backgroundColor: colors.primary }}
-            />
-            <span className="text-white/80">Avaliando nível de dano...</span>
-          </div>
-          <div className="flex items-center gap-3 text-left">
-            <div
-              className="w-2 h-2 rounded-full animate-pulse"
-              style={{ backgroundColor: colors.primary }}
-            />
-            <span className="text-white/80">Atualizando rotina personalizada...</span>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
