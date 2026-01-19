@@ -8,7 +8,7 @@ interface AppHeaderProps {
   accentColor?: string;
 }
 
-export default function AppHeader({ accentColor = '#667eea' }: AppHeaderProps) {
+function AppHeader({ accentColor = '#667eea' }: AppHeaderProps) {
   const pathname = usePathname();
 
   return (
@@ -69,3 +69,5 @@ export default function AppHeader({ accentColor = '#667eea' }: AppHeaderProps) {
     </header>
   );
 }
+
+export default AppHeader;
