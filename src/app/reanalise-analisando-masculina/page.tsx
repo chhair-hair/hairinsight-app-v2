@@ -73,8 +73,9 @@ ${analysis.strengths?.map((strength: string) => `• ${strength}`).join('\n') ||
         }
       } catch (err: any) {
         console.error('Erro na análise:', err);
-        setError('Erro ao processar análise. Redirecionando...');
-        setTimeout(() => router.push('/reanalise-photos-masculina'), 3000);
+        const errorMessage = err.message || 'Erro ao processar análise';
+        setError(`${errorMessage}. Redirecionando...`);
+        setTimeout(() => router.push('/reanalise-photos-masculina'), 5000);
       }
     };
 

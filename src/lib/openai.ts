@@ -8,22 +8,33 @@ export async function analyzeHairPhotos(photos: { left?: string; right?: string;
     throw new Error('Nenhuma foto fornecida para análise');
   }
 
-  // Chamar API route segura (server-side)
-  const response = await fetch('/api/analyze-photos', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ photos }),
-  });
+  console.log('Enviando fotos para análise...');
 
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.error || 'Erro ao analisar fotos');
+  try {
+    // Chamar API route segura (server-side)
+    const response = await fetch('/api/analyze-photos', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ photos }),
+    });
+
+    console.log('Resposta recebida da API:', response.status, response.statusText);
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error('Erro da API:', error);
+      throw new Error(error.error || error.details || 'Erro ao analisar fotos');
+    }
+
+    const data = await response.json();
+    console.log('Análise recebida com sucesso');
+    return data.analysis;
+  } catch (err: any) {
+    console.error('Erro ao chamar API de análise:', err);
+    throw err;
   }
-
-  const data = await response.json();
-  return data.analysis;
 }
 
 export async function generateFullRoutine(quizData: any, analysis: any) {
