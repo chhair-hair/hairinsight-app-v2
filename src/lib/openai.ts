@@ -31,7 +31,16 @@ export async function analyzeHairPhotos(
     console.log('[Frontend] Resposta recebida:', response.status, response.statusText);
 
     if (!response.ok) {
-      const error = await response.json();
+      let error;
+      try {
+        error = await response.json();
+      } catch (parseError) {
+        // Se não conseguir parsear JSON, ler como texto
+        const textError = await response.text();
+        console.error('[Frontend] Resposta não é JSON:', textError.substring(0, 200));
+        throw new Error(`Erro no servidor (${response.status}). Verifique se a API está funcionando corretamente.`);
+      }
+
       console.error('[Frontend] Erro da API:', error);
 
       // Criar mensagem de erro mais clara
@@ -39,7 +48,15 @@ export async function analyzeHairPhotos(
       throw new Error(errorMsg);
     }
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (parseError) {
+      const textResponse = await response.text();
+      console.error('[Frontend] Resposta de sucesso não é JSON:', textResponse.substring(0, 200));
+      throw new Error('Erro ao processar resposta do servidor. A API pode não estar retornando dados no formato correto.');
+    }
+
     console.log('[Frontend] Análise recebida com sucesso!');
     return data.analysis;
   } catch (err: any) {
