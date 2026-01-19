@@ -20,19 +20,28 @@ export async function analyzeHairPhotos(photos: { left?: string; right?: string;
       body: JSON.stringify({ photos }),
     });
 
-    console.log('Resposta recebida da API:', response.status, response.statusText);
+    console.log('[Frontend] Resposta recebida:', response.status, response.statusText);
 
     if (!response.ok) {
       const error = await response.json();
-      console.error('Erro da API:', error);
-      throw new Error(error.error || error.details || 'Erro ao analisar fotos');
+      console.error('[Frontend] Erro da API:', error);
+
+      // Criar mensagem de erro mais clara
+      const errorMsg = error.details || error.error || 'Erro ao analisar fotos';
+      throw new Error(errorMsg);
     }
 
     const data = await response.json();
-    console.log('Análise recebida com sucesso');
+    console.log('[Frontend] Análise recebida com sucesso!');
     return data.analysis;
   } catch (err: any) {
-    console.error('Erro ao chamar API de análise:', err);
+    console.error('[Frontend] Erro completo:', err);
+
+    // Se for erro de rede, criar mensagem específica
+    if (err.message.includes('fetch')) {
+      throw new Error('Erro de conexão. Verifique sua internet e tente novamente.');
+    }
+
     throw err;
   }
 }

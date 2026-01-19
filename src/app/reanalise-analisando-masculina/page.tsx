@@ -72,10 +72,16 @@ ${analysis.strengths?.map((strength: string) => `• ${strength}`).join('\n') ||
           setTimeout(() => router.push('/reanalise-photos-masculina'), 3000);
         }
       } catch (err: any) {
-        console.error('Erro na análise:', err);
+        console.error('[Página] Erro na análise:', err);
         const errorMessage = err.message || 'Erro ao processar análise';
-        setError(`${errorMessage}. Redirecionando...`);
-        setTimeout(() => router.push('/reanalise-photos-masculina'), 5000);
+
+        // Mostrar erro mais detalhado para o usuário
+        setError(errorMessage);
+
+        // Redirecionar após 8 segundos para dar tempo de ler o erro
+        setTimeout(() => {
+          router.push('/reanalise-photos-masculina');
+        }, 8000);
       }
     };
 

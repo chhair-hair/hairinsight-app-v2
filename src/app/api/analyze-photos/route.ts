@@ -12,7 +12,10 @@ export async function POST(request: NextRequest) {
     if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'your_openai_api_key_here') {
       console.error('OPENAI_API_KEY não configurada ou inválida');
       return NextResponse.json(
-        { error: 'Chave da OpenAI não configurada. Configure OPENAI_API_KEY no arquivo .env.local' },
+        {
+          error: 'Chave da OpenAI não configurada',
+          details: 'Configure OPENAI_API_KEY no arquivo .env.local com sua chave da OpenAI'
+        },
         { status: 500 }
       );
     }
@@ -22,16 +25,23 @@ export async function POST(request: NextRequest) {
 
     if (!photos || (!photos.left && !photos.right && !photos.down)) {
       return NextResponse.json(
-        { error: 'Nenhuma foto fornecida para análise' },
+        {
+          error: 'Nenhuma foto fornecida',
+          details: 'É necessário enviar pelo menos uma foto para análise'
+        },
         { status: 400 }
       );
     }
 
     const images = [photos.left, photos.right, photos.down].filter(Boolean);
 
-    console.log(`Analisando ${images.length} fotos com OpenAI Vision...`);
+    console.log(`[OpenAI] Analisando ${images.length} fotos com Vision API...`);
+    console.log(`[OpenAI] Chave configurada: ${process.env.OPENAI_API_KEY ? 'Sim' : 'Não'}`);
+    console.log(`[OpenAI] Prefixo da chave: ${process.env.OPENAI_API_KEY?.substring(0, 10)}...`);
 
     // Chamar OpenAI Vision API
+    console.log('[OpenAI] Iniciando chamada para API Vision...');
+
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
@@ -70,9 +80,13 @@ export async function POST(request: NextRequest) {
       max_tokens: 1500,
     });
 
+    console.log('[OpenAI] Resposta recebida com sucesso!');
+    console.log('[OpenAI] Tokens usados:', response.usage);
+
     const content = response.choices[0]?.message?.content || '{}';
 
-    console.log('Resposta da OpenAI recebida, parseando JSON...');
+    console.log('[OpenAI] Parseando JSON da resposta...');
+    console.log('[OpenAI] Preview do conteúdo:', content.substring(0, 200));
 
     let analysis;
     try {
@@ -101,19 +115,40 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, analysis });
   } catch (error: any) {
-    console.error('Erro detalhado ao analisar fotos:', {
+    console.error('[OpenAI] Erro detalhado:', {
       message: error.message,
       stack: error.stack,
-      name: error.name
+      name: error.name,
+      code: error.code,
+      type: error.type,
+      status: error.status
     });
+
+    // Mensagens de erro específicas
+    let errorMessage = 'Erro ao processar análise de fotos';
+    let errorDetails = error.message;
+
+    if (error.code === 'invalid_api_key') {
+      errorMessage = 'Chave da OpenAI inválida';
+      errorDetails = 'A chave OPENAI_API_KEY configurada não é válida. Verifique se você copiou a chave completa corretamente.';
+    } else if (error.code === 'insufficient_quota') {
+      errorMessage = 'Sem créditos na OpenAI';
+      errorDetails = 'Sua conta da OpenAI não possui créditos suficientes. Adicione créditos em https://platform.openai.com/account/billing';
+    } else if (error.code === 'rate_limit_exceeded') {
+      errorMessage = 'Limite de requisições atingido';
+      errorDetails = 'Aguarde alguns segundos e tente novamente.';
+    } else if (error.status === 401) {
+      errorMessage = 'Não autorizado';
+      errorDetails = 'A chave da OpenAI está incorreta ou expirada. Verifique sua chave em https://platform.openai.com/api-keys';
+    }
 
     return NextResponse.json(
       {
-        error: 'Erro ao processar análise de fotos',
-        details: error.message,
-        hint: 'Verifique se a chave OPENAI_API_KEY está configurada corretamente'
+        error: errorMessage,
+        details: errorDetails,
+        technicalInfo: error.message
       },
-      { status: 500 }
+      { status: error.status || 500 }
     );
   }
 }
