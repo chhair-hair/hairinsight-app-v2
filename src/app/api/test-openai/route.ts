@@ -2,42 +2,42 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   try {
-    // Verificar variáveis de ambiente (prioriza OPENAI_API_KEY_SECRET da plataforma)
-    const apiKeySecret = process.env.OPENAI_API_KEY_SECRET;
+    // ✅ Verificar variável secreta OPENAI_API_KEY
     const apiKey = process.env.OPENAI_API_KEY;
-    const finalKey = apiKeySecret || apiKey;
 
-    const result: any = {
-      OPENAI_API_KEY_SECRET: apiKeySecret ? 'Configurada ✅' : 'Não encontrada ❌',
-      OPENAI_API_KEY: apiKey ? 'Configurada ✅' : 'Não encontrada ❌',
-      keyUsed: apiKeySecret ? 'OPENAI_API_KEY_SECRET (plataforma)' : (apiKey ? 'OPENAI_API_KEY (local)' : 'Nenhuma')
-    };
+    console.log('[Test OpenAI] Verificando configuração...');
+    console.log('[Test OpenAI] OPENAI_API_KEY:', apiKey ? 'Encontrada ✅' : 'Não encontrada ❌');
 
-    if (!finalKey) {
+    if (!apiKey) {
       return NextResponse.json({
         success: false,
-        error: 'Nenhuma chave OpenAI configurada',
-        ...result
+        error: 'Chave OpenAI não configurada',
+        details: 'Configure a variável secreta OPENAI_API_KEY na plataforma Lasy',
+        OPENAI_API_KEY: 'Não encontrada ❌'
       });
     }
 
-    if (finalKey === 'your_openai_api_key_here') {
+    if (apiKey === 'your_openai_api_key_here') {
       return NextResponse.json({
         success: false,
-        error: 'Chave ainda está com valor padrão',
-        ...result
+        error: 'Chave com valor padrão',
+        details: 'A chave ainda está com o valor placeholder. Configure uma chave real.',
+        OPENAI_API_KEY: 'Configurada mas inválida ⚠️'
       });
     }
 
     // Verificar formato da chave
-    const keyFormat = finalKey.substring(0, 10) + '...';
+    const keyFormat = apiKey.substring(0, 10) + '...';
+    const keyLength = apiKey.length;
+
+    console.log('[Test OpenAI] Chave válida:', keyFormat, `(${keyLength} caracteres)`);
 
     return NextResponse.json({
       success: true,
       message: 'Chave configurada corretamente ✅',
       keyFormat,
-      keyLength: finalKey.length,
-      ...result
+      keyLength,
+      OPENAI_API_KEY: 'Configurada ✅'
     });
   } catch (error: any) {
     return NextResponse.json({

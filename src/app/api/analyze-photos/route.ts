@@ -3,19 +3,30 @@ import OpenAI from 'openai';
 
 export async function POST(request: NextRequest) {
   try {
-    // Buscar chave da OpenAI das variáveis de ambiente (prioriza OPENAI_API_KEY_SECRET da plataforma)
-    const apiKey = process.env.OPENAI_API_KEY_SECRET || process.env.OPENAI_API_KEY;
+    // ✅ Buscar chave da OpenAI da variável OPENAI_API_KEY (variável secreta da plataforma)
+    const apiKey = process.env.OPENAI_API_KEY;
 
     console.log('[OpenAI] Verificando chave API...');
-    console.log('[OpenAI] OPENAI_API_KEY_SECRET:', process.env.OPENAI_API_KEY_SECRET ? 'Encontrada' : 'Não encontrada');
-    console.log('[OpenAI] OPENAI_API_KEY:', process.env.OPENAI_API_KEY ? 'Encontrada' : 'Não encontrada');
+    console.log('[OpenAI] OPENAI_API_KEY:', apiKey ? 'Encontrada ✅' : 'Não encontrada ❌');
+    console.log('[OpenAI] Primeiros 10 caracteres:', apiKey ? apiKey.substring(0, 10) + '...' : 'N/A');
 
-    if (!apiKey || apiKey === 'your_openai_api_key_here') {
-      console.error('OPENAI_API_KEY não configurada ou inválida');
+    if (!apiKey) {
+      console.error('❌ OPENAI_API_KEY não configurada');
       return NextResponse.json(
         {
           error: 'Chave da OpenAI não configurada',
-          details: 'A variável de ambiente OPENAI_API_KEY_SECRET ou OPENAI_API_KEY precisa estar configurada'
+          details: 'Configure a variável secreta OPENAI_API_KEY na plataforma Lasy'
+        },
+        { status: 500 }
+      );
+    }
+
+    if (apiKey === 'your_openai_api_key_here') {
+      console.error('❌ OPENAI_API_KEY com valor padrão');
+      return NextResponse.json(
+        {
+          error: 'Chave da OpenAI inválida',
+          details: 'A chave ainda está com o valor padrão. Configure uma chave real.'
         },
         { status: 500 }
       );

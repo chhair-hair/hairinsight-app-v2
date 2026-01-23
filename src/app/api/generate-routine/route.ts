@@ -3,12 +3,27 @@ import OpenAI from 'openai';
 
 export async function POST(request: NextRequest) {
   try {
-    // ✅ SEGURANÇA: Busca chave da variável de ambiente da plataforma
-    const apiKey = process.env.OPENAI_API_KEY_SECRET || process.env.OPENAI_API_KEY;
+    // ✅ SEGURANÇA: Busca chave da variável secreta OPENAI_API_KEY
+    const apiKey = process.env.OPENAI_API_KEY;
+
+    console.log('[Generate Routine] OPENAI_API_KEY:', apiKey ? 'Encontrada ✅' : 'Não encontrada ❌');
 
     if (!apiKey) {
       return NextResponse.json(
-        { error: 'OpenAI API key não configurada nas variáveis de ambiente' },
+        {
+          error: 'OpenAI API key não configurada',
+          details: 'Configure a variável secreta OPENAI_API_KEY na plataforma Lasy'
+        },
+        { status: 500 }
+      );
+    }
+
+    if (apiKey === 'your_openai_api_key_here') {
+      return NextResponse.json(
+        {
+          error: 'OpenAI API key inválida',
+          details: 'A chave ainda está com o valor padrão. Configure uma chave real.'
+        },
         { status: 500 }
       );
     }
