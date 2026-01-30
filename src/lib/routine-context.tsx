@@ -1,6 +1,12 @@
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import {
+  getTodayRoutineStatus,
+  DEFAULT_ROUTINE_SCHEDULE,
+  type RoutineScheduleDay,
+  type TodayRoutineStatus,
+} from './routine-calendar';
 
 // Tipos atualizados para recomendação de produtos (SEM marcas, preços ou valores)
 export interface ProductRecommendation {
@@ -39,6 +45,9 @@ interface RoutineContextType {
   setUserRoutine: (routine: UserRoutine) => void;
   generateMockRoutine: () => void;
   updateRoutine: (updates: Partial<UserRoutine>) => void;
+  routineSchedule: RoutineScheduleDay[];
+  setRoutineSchedule: (schedule: RoutineScheduleDay[]) => void;
+  todayStatus: TodayRoutineStatus;
 }
 
 const RoutineContext = createContext<RoutineContextType | undefined>(undefined);
@@ -174,6 +183,10 @@ const mockNightRoutine: RoutineStep[] = [
 
 export function RoutineProvider({ children }: { children: ReactNode }) {
   const [userRoutine, setUserRoutine] = useState<UserRoutine | null>(null);
+  const [routineSchedule, setRoutineSchedule] = useState<RoutineScheduleDay[]>(DEFAULT_ROUTINE_SCHEDULE);
+
+  // Calcula o status de hoje dinamicamente
+  const todayStatus = getTodayRoutineStatus(routineSchedule);
 
   // Função para gerar rotina baseada nos dados do quiz (ou mock se não houver)
   const generateMockRoutine = () => {
@@ -230,6 +243,9 @@ export function RoutineProvider({ children }: { children: ReactNode }) {
         setUserRoutine,
         generateMockRoutine,
         updateRoutine,
+        routineSchedule,
+        setRoutineSchedule,
+        todayStatus,
       }}
     >
       {children}

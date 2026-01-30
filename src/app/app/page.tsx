@@ -1,6 +1,7 @@
 'use client';
 
 import { useRoutine } from '@/lib/routine-context';
+import { formatNextRoutineDate } from '@/lib/routine-calendar';
 import { useQuiz } from '@/lib/quiz-context';
 import AppHeader from '@/components/custom/app-header';
 import { Sparkles, Home, Calendar, User, Settings, TrendingUp, Droplets, Wind, Clock, ShoppingBag, CheckCircle2, Package, Play, X, ChevronRight, Timer, Info, ArrowLeft, Pause } from 'lucide-react';
@@ -18,7 +19,7 @@ interface RoutineHistory {
 
 export default function AppPage() {
   const router = useRouter();
-  const { userRoutine, generateMockRoutine } = useRoutine();
+  const { userRoutine, generateMockRoutine, todayStatus } = useRoutine();
   const { quizData, getThemeColors } = useQuiz();
   const [activeTab, setActiveTab] = useState<'inicio' | 'rotina' | 'perfil' | 'config' | 'historico'>('inicio');
   const [showUpdateAnalysisModal, setShowUpdateAnalysisModal] = useState(false);
@@ -358,7 +359,7 @@ export default function AppPage() {
               </div>
             </div>
 
-            {/* Sua Rotina de Hoje */}
+            {/* Sua Rotina de Hoje - DINÂMICA */}
             <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/20 rounded-2xl p-4 shadow-2xl backdrop-blur-sm mt-4">
               <div className="flex items-center gap-2 mb-3">
                 <div
@@ -368,86 +369,134 @@ export default function AppPage() {
                   <Calendar className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold">Rotina de Hoje</h3>
-                  <p className="text-white/60 text-xs">Siga o passo a passo</p>
+                  <h3 className="text-base font-bold">
+                    {todayStatus.hasRoutine ? 'Rotina de Hoje' : 'Dia de Descanso'}
+                  </h3>
+                  <p className="text-white/60 text-xs">
+                    {todayStatus.dayName}
+                  </p>
                 </div>
               </div>
 
-              {/* Informações da rotina - PRIMEIRO */}
-              <div className="mb-3 space-y-2">
-                <div className="bg-white/5 rounded-xl p-3 border border-white/10">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="text-lg">☀️</div>
-                    <div>
-                      <h4 className="font-bold text-sm">Rotina da Manhã</h4>
-                      <p className="text-white/60 text-xs">Passos para começar o dia</p>
+              {todayStatus.hasRoutine ? (
+                <>
+                  {/* TEM ROTINA HOJE */}
+                  <div className="bg-white/5 rounded-xl p-3 border border-white/10 mb-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="text-2xl">✨</div>
+                      <div>
+                        <h4 className="font-bold text-sm">{todayStatus.label}</h4>
+                        <p className="text-white/60 text-xs">{todayStatus.description}</p>
+                      </div>
                     </div>
                   </div>
-                  <div className="space-y-1.5">
-                    {userRoutine?.morningRoutine.map((step, index) => (
-                      <div key={step.id} className="flex items-start gap-2 text-xs">
-                        <div
-                          className="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5"
-                          style={{ backgroundColor: colors.primary }}
-                        >
-                          {index + 1}
-                        </div>
+
+                  {/* Informações da rotina */}
+                  <div className="mb-3 space-y-2">
+                    <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="text-lg">☀️</div>
                         <div>
-                          <p className="font-semibold text-white/90">{step.title}</p>
-                          {step.duration && (
-                            <p className="text-white/50 text-[10px]">{step.duration}</p>
-                          )}
+                          <h4 className="font-bold text-sm">Rotina da Manhã</h4>
+                          <p className="text-white/60 text-xs">Passos para começar o dia</p>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
+                      <div className="space-y-1.5">
+                        {userRoutine?.morningRoutine.map((step, index) => (
+                          <div key={step.id} className="flex items-start gap-2 text-xs">
+                            <div
+                              className="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5"
+                              style={{ backgroundColor: colors.primary }}
+                            >
+                              {index + 1}
+                            </div>
+                            <div>
+                              <p className="font-semibold text-white/90">{step.title}</p>
+                              {step.duration && (
+                                <p className="text-white/50 text-[10px]">{step.duration}</p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
 
-                <div className="bg-white/5 rounded-xl p-3 border border-white/10">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="text-lg">🌙</div>
-                    <div>
-                      <h4 className="font-bold text-sm">Rotina da Noite</h4>
-                      <p className="text-white/60 text-xs">Cuidados antes de dormir</p>
+                    <div className="bg-white/5 rounded-xl p-3 border border-white/10">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="text-lg">🌙</div>
+                        <div>
+                          <h4 className="font-bold text-sm">Rotina da Noite</h4>
+                          <p className="text-white/60 text-xs">Cuidados antes de dormir</p>
+                        </div>
+                      </div>
+                      <div className="space-y-1.5">
+                        {userRoutine?.nightRoutine.map((step, index) => (
+                          <div key={step.id} className="flex items-start gap-2 text-xs">
+                            <div
+                              className="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5"
+                              style={{ backgroundColor: colors.primary }}
+                            >
+                              {index + 1}
+                            </div>
+                            <div>
+                              <p className="font-semibold text-white/90">{step.title}</p>
+                              {step.duration && (
+                                <p className="text-white/50 text-[10px]">{step.duration}</p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                  <div className="space-y-1.5">
-                    {userRoutine?.nightRoutine.map((step, index) => (
-                      <div key={step.id} className="flex items-start gap-2 text-xs">
-                        <div
-                          className="w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5"
-                          style={{ backgroundColor: colors.primary }}
-                        >
-                          {index + 1}
-                        </div>
-                        <div>
-                          <p className="font-semibold text-white/90">{step.title}</p>
-                          {step.duration && (
-                            <p className="text-white/50 text-[10px]">{step.duration}</p>
-                          )}
-                        </div>
+
+                  {/* Botão de iniciar */}
+                  <button
+                    onClick={handleStartRoutine}
+                    className="w-full px-4 py-3 text-sm rounded-xl font-semibold transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+                    style={{
+                      background: `linear-gradient(135deg, ${colors.primary}, ${colors.primary}dd)`,
+                      boxShadow: `0 10px 30px -10px ${colors.primary}80`
+                    }}
+                  >
+                    <Play className="w-4 h-4" />
+                    <span>Iniciar Rotina</span>
+                  </button>
+
+                  <p className="text-white/50 text-xs text-center mt-2">
+                    Timer interativo vai te guiar em cada etapa
+                  </p>
+                </>
+              ) : (
+                <>
+                  {/* NÃO TEM ROTINA HOJE - DIA DE DESCANSO */}
+                  <div className="text-center py-6">
+                    <div className="text-6xl mb-4">😌</div>
+                    <h4 className="font-bold text-lg mb-2">Aproveite para descansar!</h4>
+                    <p className="text-white/60 text-sm mb-4">
+                      Hoje não há rotina programada. Seus cabelos também precisam de descanso.
+                    </p>
+
+                    {todayStatus.nextRoutineDate && (
+                      <div className="bg-white/5 rounded-xl p-3 border border-white/10 inline-block">
+                        <p className="text-white/80 text-xs mb-1">Próxima rotina</p>
+                        <p className="font-bold" style={{ color: colors.primary }}>
+                          {todayStatus.nextRoutineDayName} ({formatNextRoutineDate(todayStatus.nextRoutineDate)})
+                        </p>
                       </div>
-                    ))}
+                    )}
                   </div>
-                </div>
-              </div>
 
-              {/* Botão de iniciar - DEPOIS */}
-              <button
-                onClick={handleStartRoutine}
-                className="w-full px-4 py-3 text-sm rounded-xl font-semibold transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
-                style={{
-                  background: `linear-gradient(135deg, ${colors.primary}, ${colors.primary}dd)`,
-                  boxShadow: `0 10px 30px -10px ${colors.primary}80`
-                }}
-              >
-                <Play className="w-4 h-4" />
-                <span>Iniciar Rotina</span>
-              </button>
-
-              <p className="text-white/50 text-xs text-center mt-2">
-                Timer interativo vai te guiar em cada etapa
-              </p>
+                  {/* Botão para ver calendário completo */}
+                  <button
+                    onClick={() => router.push('/schedule')}
+                    className="w-full px-4 py-3 text-sm rounded-xl font-semibold transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 bg-white/10 border border-white/20"
+                  >
+                    <Calendar className="w-4 h-4" />
+                    <span>Ver Calendário Completo</span>
+                  </button>
+                </>
+              )}
             </div>
           </div>
         )}
