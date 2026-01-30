@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import AppHeader from '@/components/custom/app-header';
-import { MessageCircle, Send, Sparkles, Loader2 } from 'lucide-react';
+import { MessageCircle, Send, Sparkles, Loader2, Trash2 } from 'lucide-react';
 import { useQuiz } from '@/lib/quiz-context';
 import { Gender } from '@/lib/types';
 
@@ -20,7 +20,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      content: 'Olá! 👋 Sou seu assistente especializado em cuidados capilares. Como posso ajudar você hoje?',
+      content: 'Olá! Que bom te ver por aqui! 💕\n\nSou sua assistente pessoal de cuidados capilares e estou aqui para te ajudar a cuidar melhor dos seus cabelos. Seja para tirar dúvidas, descobrir sua rotina ideal ou receber dicas personalizadas, pode contar comigo!\n\nComo posso te ajudar hoje?',
       sender: 'bot',
       timestamp: '',
     },
@@ -38,14 +38,41 @@ export default function ChatPage() {
     scrollToBottom();
   }, [messages]);
 
-  // Fix hydration mismatch by setting timestamp only on client
+  // Carregar histórico do localStorage e fix hydration mismatch
   useEffect(() => {
     setMounted(true);
+
+    // Tentar carregar histórico salvo
+    try {
+      const savedHistory = localStorage.getItem('hairinsight-chat-history');
+      if (savedHistory) {
+        const parsedHistory = JSON.parse(savedHistory);
+        if (Array.isArray(parsedHistory) && parsedHistory.length > 0) {
+          setMessages(parsedHistory);
+          return;
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao carregar histórico do chat:', error);
+    }
+
+    // Se não houver histórico, adiciona timestamp à mensagem inicial
     setMessages(prev => prev.map(msg => ({
       ...msg,
       timestamp: msg.timestamp || new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
     })));
   }, []);
+
+  // Salvar histórico no localStorage sempre que as mensagens mudarem
+  useEffect(() => {
+    if (mounted && messages.length > 0) {
+      try {
+        localStorage.setItem('hairinsight-chat-history', JSON.stringify(messages));
+      } catch (error) {
+        console.error('Erro ao salvar histórico do chat:', error);
+      }
+    }
+  }, [messages, mounted]);
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isTyping) return;
@@ -113,6 +140,23 @@ export default function ChatPage() {
     'Melhor forma de secar o cabelo?',
   ];
 
+  const clearHistory = () => {
+    if (confirm('Deseja realmente limpar todo o histórico do chat?')) {
+      const initialMessage: Message = {
+        id: 1,
+        content: 'Olá! Que bom te ver por aqui! 💕\n\nSou sua assistente pessoal de cuidados capilares e estou aqui para te ajudar a cuidar melhor dos seus cabelos. Seja para tirar dúvidas, descobrir sua rotina ideal ou receber dicas personalizadas, pode contar comigo!\n\nComo posso te ajudar hoje?',
+        sender: 'bot',
+        timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      };
+      setMessages([initialMessage]);
+      try {
+        localStorage.removeItem('hairinsight-chat-history');
+      } catch (error) {
+        console.error('Erro ao limpar histórico:', error);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#0D0D0D] flex flex-col">
       <AppHeader accentColor={accentColor} />
@@ -121,12 +165,25 @@ export default function ChatPage() {
         <div className="max-w-4xl w-full mx-auto flex flex-col flex-1">
           {/* Header */}
           <div className="mb-6">
-            <div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border mb-4"
-              style={{ borderColor: `${accentColor}30` }}
-            >
-              <MessageCircle className="w-4 h-4" style={{ color: accentColor }} />
-              <span className="text-sm text-white/80">Chat com IA</span>
+            <div className="flex items-center justify-between mb-4">
+              <div
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border"
+                style={{ borderColor: `${accentColor}30` }}
+              >
+                <MessageCircle className="w-4 h-4" style={{ color: accentColor }} />
+                <span className="text-sm text-white/80">Chat com IA</span>
+              </div>
+
+              {messages.length > 1 && (
+                <button
+                  onClick={clearHistory}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-sm text-white/60 hover:text-white/80"
+                  title="Limpar histórico"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  <span className="hidden sm:inline">Limpar histórico</span>
+                </button>
+              )}
             </div>
 
             <h1 className="text-4xl sm:text-5xl font-bold mb-4">
