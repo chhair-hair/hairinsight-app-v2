@@ -1,93 +1,126 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import AppHeader from '@/components/custom/app-header';
-import { MessageCircle, Sparkles, Loader2 } from 'lucide-react';
+import { MessageCircle, Send, Sparkles, Loader2 } from 'lucide-react';
 import { useQuiz } from '@/lib/quiz-context';
 import { Gender } from '@/lib/types';
 
-declare global {
-  interface Window {
-    Tawk_API?: any;
-    Tawk_LoadStart?: Date;
-  }
+interface Message {
+  id: number;
+  content: string;
+  sender: 'user' | 'bot';
+  timestamp: string;
 }
 
 export default function ChatPage() {
   const { quizData } = useQuiz();
   const gender: Gender = quizData?.gender || 'feminino';
   const accentColor = gender === 'feminino' ? '#FF6F91' : '#9B59B6';
-  const [isLoading, setIsLoading] = useState(true);
-  const [tawkLoaded, setTawkLoaded] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 1,
+      content: 'Olá! 👋 Sou seu assistente especializado em cuidados capilares. Como posso ajudar você hoje?',
+      sender: 'bot',
+      timestamp: '',
+    },
+  ]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   useEffect(() => {
-    // Configuração do Tawk.to
-    window.Tawk_API = window.Tawk_API || {};
-    window.Tawk_LoadStart = new Date();
+    scrollToBottom();
+  }, [messages]);
 
-    // Criar e adicionar o script do Tawk.to
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = 'https://embed.tawk.to/YOUR_PROPERTY_ID/YOUR_WIDGET_ID'; // Substitua pelos seus IDs do Tawk.to
-    script.charset = 'UTF-8';
-    script.setAttribute('crossorigin', '*');
+  // Fix hydration mismatch by setting timestamp only on client
+  useEffect(() => {
+    setMounted(true);
+    setMessages(prev => prev.map(msg => ({
+      ...msg,
+      timestamp: msg.timestamp || new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+    })));
+  }, []);
 
-    // Callback quando o Tawk.to carregar
-    script.onload = () => {
-      setIsLoading(false);
-      setTawkLoaded(true);
+  const handleSendMessage = async () => {
+    if (!inputMessage.trim() || isTyping) return;
 
-      // Configurações adicionais do Tawk.to
-      if (window.Tawk_API) {
-        // Maximizar o widget automaticamente
-        window.Tawk_API.onLoad = function() {
-          window.Tawk_API.maximize();
-        };
+    const userMessage: Message = {
+      id: messages.length + 1,
+      content: inputMessage,
+      sender: 'user',
+      timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+    };
 
-        // Customizar com dados do usuário (opcional)
-        window.Tawk_API.setAttributes({
-          name: 'Visitante',
+    setMessages(prev => [...prev, userMessage]);
+    setInputMessage('');
+    setIsTyping(true);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: inputMessage,
           gender: gender,
-          hairType: quizData?.hairType || 'Não informado',
-        }, function(error: any) {
-          if (error) {
-            console.error('Erro ao definir atributos Tawk.to:', error);
-          }
-        });
+          hairType: quizData?.hairType,
+          hairGoal: quizData?.hairGoal,
+          washFrequency: quizData?.washFrequency,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Erro ao comunicar com a API');
       }
-    };
 
-    script.onerror = () => {
-      setIsLoading(false);
-      console.error('Erro ao carregar o Tawk.to');
-    };
+      const data = await response.json();
 
-    document.head.appendChild(script);
+      const botMessage: Message = {
+        id: messages.length + 2,
+        content: data.message,
+        sender: 'bot',
+        timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      };
 
-    // Cleanup ao desmontar o componente
-    return () => {
-      // Minimizar o widget quando sair da página
-      if (window.Tawk_API && window.Tawk_API.minimize) {
-        window.Tawk_API.minimize();
-      }
-    };
-  }, [quizData, gender]);
-
-  // Abrir o chat quando clicar no botão
-  const handleOpenChat = () => {
-    if (window.Tawk_API && window.Tawk_API.maximize) {
-      window.Tawk_API.maximize();
+      setMessages(prev => [...prev, botMessage]);
+    } catch (error) {
+      console.error('Erro ao enviar mensagem:', error);
+      const errorMessage: Message = {
+        id: messages.length + 2,
+        content: 'Desculpe, tive um problema ao processar sua mensagem. Por favor, tente novamente.',
+        sender: 'bot',
+        timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsTyping(false);
     }
   };
 
+  const suggestedQuestions = [
+    'Como identificar meu tipo de cabelo?',
+    'Qual a frequência ideal de hidratação?',
+    'Como fazer cronograma capilar?',
+    'Dicas para cabelos danificados',
+    'Como evitar pontas duplas?',
+    'Melhor forma de secar o cabelo?',
+  ];
+
   return (
-    <div className="min-h-screen bg-[#0D0D0D]">
+    <div className="min-h-screen bg-[#0D0D0D] flex flex-col">
       <AppHeader accentColor={accentColor} />
 
-      <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8 flex flex-col min-h-screen">
+      <main className="flex-1 pt-24 pb-6 px-4 sm:px-6 lg:px-8 flex flex-col">
         <div className="max-w-4xl w-full mx-auto flex flex-col flex-1">
           {/* Header */}
-          <div className="mb-8">
+          <div className="mb-6">
             <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border mb-4"
               style={{ borderColor: `${accentColor}30` }}
@@ -104,122 +137,102 @@ export default function ChatPage() {
             </p>
           </div>
 
-          {/* Loading State */}
-          {isLoading && (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center">
-                <Loader2
-                  className="w-12 h-12 animate-spin mx-auto mb-4"
-                  style={{ color: accentColor }}
-                />
-                <p className="text-white/60">Carregando chat...</p>
-              </div>
+          {/* Chat Container */}
+          <div className="flex-1 rounded-3xl border border-white/10 bg-white/5 overflow-hidden flex flex-col min-h-0">
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-4">
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`max-w-[80%] rounded-2xl p-4 ${
+                      message.sender === 'user'
+                        ? 'text-white'
+                        : 'bg-white/10 border border-white/10'
+                    }`}
+                    style={
+                      message.sender === 'user'
+                        ? { background: `linear-gradient(135deg, ${accentColor}, ${accentColor}dd)` }
+                        : {}
+                    }
+                  >
+                    {message.sender === 'bot' && (
+                      <div className="flex items-center gap-2 mb-2">
+                        <div
+                          className="w-6 h-6 rounded-lg flex items-center justify-center"
+                          style={{ backgroundColor: `${accentColor}30` }}
+                        >
+                          <Sparkles className="w-4 h-4" style={{ color: accentColor }} />
+                        </div>
+                        <span className="text-xs font-medium text-white/60">HairInsight AI</span>
+                      </div>
+                    )}
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+                    {mounted && message.timestamp && (
+                      <span className="text-xs text-white/40 mt-2 block">
+                        {message.timestamp}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {isTyping && (
+                <div className="flex justify-start">
+                  <div className="bg-white/10 border border-white/10 rounded-2xl p-4">
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin" style={{ color: accentColor }} />
+                      <span className="text-sm text-white/60">Pensando...</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
             </div>
-          )}
 
-          {/* Chat Container - Somente após carregar */}
-          {!isLoading && tawkLoaded && (
-            <div className="flex-1 flex flex-col items-center justify-center text-center">
-              <div
-                className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6"
-                style={{ background: `linear-gradient(135deg, ${accentColor}, ${accentColor}dd)` }}
-              >
-                <MessageCircle className="w-10 h-10 text-white" />
-              </div>
-
-              <h2 className="text-2xl font-bold mb-3">Chat Ativo!</h2>
-              <p className="text-white/60 mb-6 max-w-md">
-                Nosso assistente virtual está pronto para responder suas dúvidas sobre cuidados capilares.
-              </p>
-
-              <button
-                onClick={handleOpenChat}
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105"
-                style={{ background: `linear-gradient(135deg, ${accentColor}, ${accentColor}dd)` }}
-              >
-                <MessageCircle className="w-5 h-5" />
-                <span>Abrir Chat</span>
-              </button>
-
-              {/* Perguntas Frequentes */}
-              <div className="mt-12 w-full max-w-2xl">
-                <h3 className="text-lg font-bold mb-4 text-left">Perguntas Frequentes</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {[
-                    'Como identificar meu tipo de cabelo?',
-                    'Qual a frequência ideal de hidratação?',
-                    'Como fazer cronograma capilar?',
-                    'Dicas para cabelos danificados',
-                    'Como evitar pontas duplas?',
-                    'Melhor forma de secar o cabelo?',
-                  ].map((question, index) => (
+            {/* Suggested Questions */}
+            {messages.length === 1 && (
+              <div className="px-6 pb-4">
+                <p className="text-sm text-white/60 mb-3">Perguntas sugeridas:</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {suggestedQuestions.map((question, index) => (
                     <button
                       key={index}
-                      onClick={handleOpenChat}
-                      className="text-left px-4 py-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors text-sm"
+                      onClick={() => setInputMessage(question)}
+                      className="text-left px-4 py-3 rounded-xl border border-white/10 text-sm hover:bg-white/5 transition-colors"
                     >
                       {question}
                     </button>
                   ))}
                 </div>
               </div>
+            )}
 
-              {/* Benefícios do Chat */}
-              <div className="mt-12 w-full max-w-2xl grid grid-cols-1 md:grid-cols-3 gap-4">
-                {[
-                  {
-                    icon: '🤖',
-                    title: 'IA Especializada',
-                    desc: 'Respostas personalizadas sobre cabelos',
-                  },
-                  {
-                    icon: '⚡',
-                    title: 'Respostas Rápidas',
-                    desc: 'Assistência imediata 24/7',
-                  },
-                  {
-                    icon: '💬',
-                    title: 'Suporte Completo',
-                    desc: 'Tire todas as suas dúvidas',
-                  },
-                ].map((benefit, index) => (
-                  <div
-                    key={index}
-                    className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center"
-                  >
-                    <div className="text-4xl mb-3">{benefit.icon}</div>
-                    <h4 className="font-semibold mb-2">{benefit.title}</h4>
-                    <p className="text-sm text-white/60">{benefit.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Error State */}
-          {!isLoading && !tawkLoaded && (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center max-w-md">
-                <div
-                  className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
-                  style={{ backgroundColor: `${accentColor}20` }}
-                >
-                  <MessageCircle className="w-10 h-10" style={{ color: accentColor }} />
-                </div>
-                <h2 className="text-2xl font-bold mb-3">Ops! Algo deu errado</h2>
-                <p className="text-white/60 mb-6">
-                  Não foi possível carregar o chat. Por favor, recarregue a página ou tente novamente mais tarde.
-                </p>
+            {/* Input */}
+            <div className="border-t border-white/10 p-4">
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder="Digite sua pergunta..."
+                  className="flex-1 px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-white/20 focus:outline-none transition-colors text-white placeholder:text-white/40"
+                  disabled={isTyping}
+                />
                 <button
-                  onClick={() => window.location.reload()}
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105"
+                  onClick={handleSendMessage}
+                  disabled={!inputMessage.trim() || isTyping}
+                  className="px-6 py-3 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ background: `linear-gradient(135deg, ${accentColor}, ${accentColor}dd)` }}
                 >
-                  Recarregar Página
+                  <Send className="w-5 h-5" />
                 </button>
               </div>
             </div>
-          )}
+          </div>
         </div>
       </main>
     </div>
