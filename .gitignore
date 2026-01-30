@@ -43,7 +43,5 @@ coverage/
 Thumbs.db
 
 # Environment variables - NEVER commit these files!
-.env
-.env*.local
 .vercel
 .lasy/

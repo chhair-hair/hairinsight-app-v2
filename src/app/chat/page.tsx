@@ -190,7 +190,7 @@ export default function ChatPage() {
               Assistente <span style={{ color: accentColor }}>Virtual</span>
             </h1>
             <p className="text-lg text-white/60">
-              Tire suas dúvidas sobre cuidados capilares 24/7
+              Sua assistente pessoal disponível 24 horas por dia
             </p>
           </div>
 
