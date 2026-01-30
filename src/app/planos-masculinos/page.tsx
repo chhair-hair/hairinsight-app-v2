@@ -21,7 +21,7 @@ export default function PlanosMasculinosPage() {
       features: [
         'Rotina capilar personalizada',
         'Análise IA das fotos',
-        'Recomendações de produtos',
+        'Recomendações de produtos (V2)',
         'Acesso ao app completo',
         'Suporte via chat'
       ]
@@ -35,11 +35,10 @@ export default function PlanosMasculinosPage() {
       features: [
         'Rotina capilar personalizada',
         'Análise IA das fotos',
-        'Recomendações de produtos',
+        'Recomendações de produtos (V2)',
         'Acesso ao app completo',
-        'Suporte prioritário',
-        'Relatórios mensais de progresso',
-        'Acesso antecipado a novos recursos'
+        'Relatórios mensais de progresso (V2)',
+        'Suporte via chat'
       ]
     }
   };
