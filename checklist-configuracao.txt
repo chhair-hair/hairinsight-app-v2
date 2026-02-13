@@ -1,0 +1,136 @@
+╔══════════════════════════════════════════════════════════════════╗
+║                  ✅ CHECKLIST DE CONFIGURAÇÃO                    ║
+║              Sistema de Notificações Push - Firebase            ║
+╚══════════════════════════════════════════════════════════════════╝
+
+📋 VARIÁVEIS DE AMBIENTE (.env.local)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Frontend (Cliente):
+  □ NEXT_PUBLIC_FIREBASE_API_KEY
+  □ NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+  □ NEXT_PUBLIC_FIREBASE_PROJECT_ID
+  □ NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+  □ NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+  □ NEXT_PUBLIC_FIREBASE_APP_ID
+  □ NEXT_PUBLIC_FIREBASE_VAPID_KEY
+
+Backend (Servidor):
+  □ FIREBASE_PROJECT_ID
+  □ FIREBASE_CLIENT_EMAIL
+  □ FIREBASE_PRIVATE_KEY
+
+Supabase:
+  □ NEXT_PUBLIC_SUPABASE_URL
+  □ SUPABASE_SERVICE_ROLE_KEY
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🗄️ BANCO DE DADOS (Supabase)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  □ Tabela 'fcm_tokens' criada
+  
+  SQL necessário:
+  
+  CREATE TABLE fcm_tokens (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    fcm_token TEXT UNIQUE NOT NULL,
+    user_id UUID,
+    device_info JSONB,
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+  );
+
+  CREATE INDEX idx_fcm_tokens_active ON fcm_tokens(is_active);
+  CREATE INDEX idx_fcm_tokens_user ON fcm_tokens(user_id);
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📁 ARQUIVOS DO PROJETO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✅ /public/firebase-messaging-sw.js
+  ✅ /src/lib/firebase-config.ts
+  ✅ /src/lib/firebase-admin.ts
+  ✅ /src/components/NotificationManager.tsx
+  ✅ /src/app/api/register-fcm-token/route.ts
+  ✅ /src/app/api/send-notification/route.ts
+  ✅ /src/app/teste-notificacoes/page.tsx
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧪 COMO TESTAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Acesse: /teste-notificacoes
+
+2. Clique em "Ativar Notificações"
+
+3. Permita quando o navegador pedir
+
+4. Aguarde o token FCM aparecer
+
+5. Clique em "Enviar para Mim"
+
+6. Verifique se recebeu a notificação
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ O QUE VOCÊ DEVE VER SE ESTIVER FUNCIONANDO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+No Console (F12):
+  ✅ Firebase Cloud Messaging inicializado com sucesso
+  ✅ Token FCM obtido: abc123...
+  ✅ Token FCM registrado com sucesso
+
+Na Página de Teste:
+  ✅ Card verde "Notificações Ativadas"
+  ✅ Token FCM visível (string longa)
+  ✅ Contador de dispositivos = 1
+
+Após Enviar:
+  ✅ Toast "Notificação enviada com sucesso"
+  ✅ Notificação aparece (popup ou sistema)
+  ✅ Histórico mostra teste com ✓ verde
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ PROBLEMAS COMUNS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+"Permissão de notificações negada"
+  → Vá nas configurações do navegador e permita notificações
+
+"VAPID Key não configurada"
+  → Configure NEXT_PUBLIC_FIREBASE_VAPID_KEY no .env.local
+
+"Firebase Cloud Messaging não configurado"
+  → Verifique todas as variáveis NEXT_PUBLIC_FIREBASE_*
+
+"Tabela fcm_tokens não existe"
+  → Execute: npx supabase migration new create_fcm_tokens_table
+  → Adicione o SQL acima
+  → Execute: npx supabase db push --yes
+
+"Service Worker não registrado"
+  → Verifique em Application > Service Workers (F12)
+  → Deve aparecer: /firebase-messaging-sw.js
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📞 PRÓXIMOS PASSOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Depois de testar com sucesso, você pode:
+
+  1. Integrar notificações na rotina capilar
+  2. Criar lembretes automáticos (cron jobs)
+  3. Enviar notificações quando análise terminar
+  4. Alertas personalizados por usuário
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Feito com 💜 por Lasy AI
